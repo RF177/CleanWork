@@ -37,24 +37,20 @@
 					<p:commandButton value="Voltar" id="btn_voltar" icon="fa fa-undo" immediate="true" actionListener="#{vendaBean.atualizar}" update="form_data_venda :form_table_venda" styleClass="btn_menu" />
 					
 					<p:commandButton value="Emitir" id="btn_emitir" icon="fa fa-check-circle" immediate="true" actionListener="#{vendaBean.emitir}" update="form_data_venda :form_table_venda" rendered="#{vendaBean.selectedVenda.id_venda != null and vendaBean.selectedVenda.situacao == 1}" styleClass="btn_menu" style="float: right;" />						
-					<p:commandButton value="Cancelar" id="btn_cancelar" icon="fa fa-times-circle" immediate="true" actionListener="#{vendaBean.cancelar}" update="form_data_venda :form_table_venda" rendered="#{vendaBean.selectedVenda.situacao == 2}" styleClass="btn_menu" style="float: right;" />
-					<h:commandLink value="Imprimir" onclick="javascript:window.open('','imp','height=600,width=800,toolbar=no,scrollbars=no')" target="imp" action="#{vendaBean.imprimir}" rendered="#{vendaBean.selectedVenda.situacao == 2}" style="float: right;" 
-					styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left" />  
-				
-					<h:outputText value="#{vendaBean.selectedVenda.data_emissao}" title="Data que o pedido foi emitido" style="float: right; padding: 2px; color: #FFFFFF; border-radius: 5px; background: #{vendaBean.selectedVenda.situacaoCor};" rendered="#{vendaBean.selectedVenda.situacao == 2}" styleClass="btn_menu" ><f:convertDateTime pattern="dd/MM/yyyy"/></h:outputText>
-					<h:outputText value="#{vendaBean.selectedVenda.situacaoDescricao}" style="float: right; padding: 2px; color: #FFFFFF; border-radius: 5px; background: #{vendaBean.selectedVenda.situacaoCor};" styleClass="btn_menu" />
-					<p:outputLabel value="Situação:" style="float: right;" styleClass="btn_menu" />						
+					<p:commandButton value="Cancelar" id="btn_cancelar" icon="fa fa-times-circle" immediate="true" actionListener="#{vendaBean.cancelar}" update="form_data_venda :form_table_venda" rendered="#{vendaBean.selectedVenda.situacao == 2}" styleClass="btn_menu" style="float: right; margin-right: 10px;" />
+					
+					<p:commandButton value="Imprimir" oncomplete="if (!args.validationFailed){ jQuery('#button_imprimir').click(); }" styleClass="btn_menu" rendered="#{vendaBean.selectedVenda.situacao == 2}" icon="fa fa-print" style="float: right;" />					  											
 				</h:panelGroup>											
 			</div>
 		
 			<p:panel rendered="#{vendaBean.selectedVenda != null}" styleClass="altura"  >				    	
 	        	<div class="row">
-			    	<div class="three columns">	
+			    	<div class="two columns">	
 	        			<p:outputLabel value="Número" />
 	        			<p:inputText id="numero" value="#{vendaBean.selectedVenda.id_venda}" disabled="true" styleClass="u-full-width center" />
 	        		</div>
 	        		
-	        		<div class="three columns">
+	        		<div class="two columns">
 	        			<p:outputLabel value="Data Cadastro" />
 	        			<p:calendar id="data" disabled="true" value="#{vendaBean.selectedVenda.data_cadastro}" locale="pt" pattern="dd/MM/yyyy" maxlength="10" styleClass="u-full-width" />
 	        		</div>
@@ -72,14 +68,22 @@
 	        		<div class="three columns">
 	        			<p:outputLabel value="Forma Recebimento" />
 	        			<p:selectOneMenu id="forma_recbto" value="#{vendaBean.selectedVenda.forma_recbto}" disabled="#{vendaBean.selectedVenda.situacao != 1}" styleClass="u-full-width" >
-		        		<f:selectItem itemValue="1" itemLabel="Boleto" />
-						<f:selectItem itemValue="2" itemLabel="Dinheiro" />
-						<f:selectItem itemValue="3" itemLabel="Cheque" />
-						<f:selectItem itemValue="4" itemLabel="Depósito" />
-						<f:selectItem itemValue="5" itemLabel="Cartão de Crédito" />
-						<f:selectItem itemValue="6" itemLabel="Cartão de Débito" />							
-						<p:ajax event="valueChange" process="@this" />																	     							           			                			                			                  			               			              	                				                
-		            </p:selectOneMenu>
+			        		<f:selectItem itemValue="1" itemLabel="Boleto" />
+							<f:selectItem itemValue="2" itemLabel="Dinheiro" />
+							<f:selectItem itemValue="3" itemLabel="Cheque" />
+							<f:selectItem itemValue="4" itemLabel="Depósito" />
+							<f:selectItem itemValue="5" itemLabel="Cartão de Crédito" />
+							<f:selectItem itemValue="6" itemLabel="Cartão de Débito" />							
+							<p:ajax event="valueChange" process="@this" />																	     							           			                			                			                  			               			              	                				                
+			            </p:selectOneMenu>
+	        		</div>
+	        		
+	        		<div class="two columns">
+	        			<p:outputLabel value="Situação" />
+						<h:outputText value="#{vendaBean.selectedVenda.situacaoDescricao}" style="font-size: medium; padding: 2px; color: #FFFFFF; border-radius: 5px; background: #{vendaBean.selectedVenda.situacaoCor};" />
+						<!-- 
+						<h:outputText value="#{vendaBean.selectedVenda.data_emissao}" title="Data que o pedido foi emitido" style="float: right; padding: 2px; color: #FFFFFF; border-radius: 5px; background: #{vendaBean.selectedVenda.situacaoCor};" rendered="#{vendaBean.selectedVenda.situacao == 2}" styleClass="btn_menu" ><f:convertDateTime pattern="dd/MM/yyyy"/></h:outputText>
+						 -->
 	        		</div>		        		
 	        	</div>
 	        	
@@ -97,11 +101,10 @@
 					</h:panelGroup>			
 					<p:commandButton icon="ui-icon-search" update=":form_pesquisa_generica" actionListener="#{vendaBean.openPesquisaGenerica}" oncomplete="PF('data_table_pesquisa_generica').clearFilters(); PF('pesquisa_generica_dialog').show();" immediate="true" disabled="#{vendaBean.selectedVenda.situacao != 1}" styleClass="button-search" ><f:attribute name="parameter" value="cliente"/></p:commandButton>		        	
 	        	</div>
-	        	 
-	        	
+	        	 	        	
 	        	<br/><br/>
      
-     				<div class="row">
+     			<div class="row">
 		            <p:dataTable id="table_itens" widgetVar="table_itens" 
 		            	var="item" 
 		        		value="#{vendaBean.selectedVenda.vendaItems}"
@@ -110,7 +113,7 @@
 						liveScroll="false" 
 						scrollable="true"
 						scrollHeight="100%"
-						style="height: calc(100vh - 335px);" >
+						style="height: calc(100vh - 330px);" >
 						
 						<f:facet name="header">Produtos</f:facet>	
 		            	<p:column headerText="Produto" style="width: 300px;" sortBy="#{item.produto.descricao}" ><h:outputText value="#{item.produto.id_produto} - #{item.produto.descricao}" /></p:column>
@@ -228,6 +231,10 @@
 			<br/>
 		</p:dialog>
 	</h:form>
+		
+	<h:form id="form_data_imprimir" target="_blank" prependId="false">				
+		<p:commandButton  style="display: none;" widgetVar="button_imprimir" id="button_imprimir" ajax="false" actionListener="#{vendaBean.imprimir}" />			
+	</h:form>	
 		
 	<h:form id="dlg_exc_venda">
 		<p:confirmDialog message="Deseja realmente excluir esta venda?" hideEffect="explode" header="Aviso" severity="alert" widgetVar="confirmation_exc_venda" modal="true" >							
