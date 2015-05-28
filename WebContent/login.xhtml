@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"	
+	xmlns:p="http://primefaces.org/ui">
+	
+<h:head>
+	<title><ui:insert name="title">CleanWork</ui:insert></title>
+	<link rel="stylesheet" href="css/login.css" />
+	<link rel="stylesheet" href="css/skeleton-form.css" />
+	<link rel="stylesheet" href="css/font-awesome-4.3.0/css/font-awesome.css" />
+</h:head>
+<h:body>
+	
+	<h:form id="form_login" >	
+		
+		<p:growl id="growl" showDetail="true" />
+		
+		<center>
+			
+			<br/>
+			<div class="row">			
+				<i class="fa fa-leaf fa-6" style="color: #1BBC9B; font-size: 32px;" />
+				<h:outputText value="Clean" style="font-family: Helvetica; margin-left: 5px; font-size: 32px; color: #777777; font-weight: bold;" />
+				<h:outputText value="Work" style="font-family: Helvetica; font-size: 32px; color: #1BBC9B; font-weight: bold;" />
+			</div>
+			
+			<div class="row">			
+				<h:outputText value="© RF17 Corp." style="font-family: Helvetica; font-size: 18px; color: #777777; font-weight: bold;" />
+			</div>
+			
+			<br/>
+			
+			<p:panel style="border: none; height: 100px; width: 200px; margin: auto; padding: 50px; border-radius: 7px; background-color: #F7F7F7;">
+				<center>
+					<div class="row">
+						<p:inputText id="username" required="false" requiredMessage="Informe o login do usuário" styleClass="u-full-width" />
+						<p:watermark value="Usuário" for="username" />
+					</div>
+					
+					<div class="row">
+						<p:password id="password" required="false" requiredMessage="Informe a senha do Usuário" styleClass="u-full-width" />
+						<p:watermark value="Senha" for="password" />							
+					</div>		
+					
+					<br/>
+																				
+					<p:button id="loginButton" value="Entrar" type="button" href="dashboard.jsf" icon="fa fa-key" styleClass="btn_principal u-full-width"  />						
+				</center>	
+			</p:panel>
+			
+		</center>																							
+	</h:form>		
+	
+</h:body>
+</html>
+
+

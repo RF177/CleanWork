@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<link type="text/css" rel="stylesheet" href="css/css.css" />
+	<link rel="stylesheet" href="css/skeleton-form.css" />
+	<link rel="stylesheet" href="css/cleanwork.css" />
+	<link rel="stylesheet" href="css/sentinel-layout.css" />
+	<link rel="stylesheet" href="css/core-layout.css" />
+	<link rel="stylesheet" href="css/simdata.css" />
+	<link rel="stylesheet" href="css/font-awesome-4.3.0/css/font-awesome.css" />
+</h:head>
+<h:body>
+	<div id="layout-menubar" class="Unselectable fontRegular" style="height: calc(100vh - 55px);" >
+		
+		<div id="buttonArea" class="layout-menubarinner-box" >
+			<!-- <p:commandButton icon="fa fa-bars" styleClass="button-search" title="Menu" style="float: right" /> -->		        		
+		</div>
+		
+		<h:form>
+			<p:button id="dynaButton" value="Dashboard" type="button" icon="fa fa-tachometer" href="dashboard.jsf" styleClass="btn_menubar" />
+			
+			<p:commandButton id="dynaButton_cadastros" value="Cadastros" type="button" icon="fa fa-user-plus" styleClass="btn_menubar" />
+		    <p:menu overlay="true" trigger="dynaButton_cadastros" my="left top" at="left bottom" >
+		        <p:menuitem value="Parceiros" url="parceiros.jsf" />
+	            <p:menuitem value="Produtos" url="produtos.jsf" />
+	            <p:menuitem value="Usuários" disabled="true" />
+	        </p:menu>
+			
+			<p:commandButton id="dynaButton_compras" value="Compras" type="button" icon="fa fa-suitcase" styleClass="btn_menubar" />
+		    <p:menu overlay="true" trigger="dynaButton_compras" my="left top" at="left bottom" >
+			    <p:menuitem value="Entradas" url="entradas.jsf" />
+		        <p:menuitem value="Relatório" url="relCompras.jsf" />
+	        </p:menu>
+			
+			<p:commandButton id="dynaButton_estoque" value="Estoque" type="button" icon="fa fa-exchange" styleClass="btn_menubar" />
+		    <p:menu overlay="true" trigger="dynaButton_estoque" my="left top" at="left bottom" >
+	        	<p:menuitem value="Consulta" url="estoque.jsf" />        	
+		   	</p:menu>
+					
+			<p:commandButton id="dynaButton_pcp" value="PCP" type="button" icon="fa fa-line-chart" styleClass="btn_menubar" />
+		    <p:menu overlay="true" trigger="dynaButton_pcp" my="left top" at="left bottom" >
+	        	<p:menuitem value="Ordem de Produção" disabled="true" />
+	        	<p:menuitem value="Produção" url="producao.jsf" />
+	        	<p:menuitem value="Ficha Técnica" url="fichatecnica.jsf" />
+	        	<p:menuitem value="Relatório de Produção" disabled="true" />
+	        	<p:menuitem value="Relatório de Consumo" disabled="true" />
+		   	</p:menu>
+		   	
+	        <p:commandButton id="dynaButton_vendas" value="Vendas" type="button" icon="fa fa-shopping-cart" styleClass="btn_menubar" />
+		    <p:menu overlay="true" trigger="dynaButton_vendas" my="left top" at="left bottom" >
+			    <p:menuitem value="Vendas" url="vendas.jsf" />
+			    <p:menuitem value="Nota Fiscal" disabled="true" />
+		        <p:menuitem value="Relatório" url="relVendas.jsf" />
+	        </p:menu>
+	        
+	        <p:commandButton id="dynaButton_financeiro" value="Financeiro" type="button" icon="fa fa-usd" styleClass="btn_menubar" />
+		    <p:menu overlay="true" trigger="dynaButton_financeiro" my="left top" at="left bottom" >
+			    <p:menuitem value="Caixa" disabled="true" />
+		        <p:menuitem value="Contas a Pagar" disabled="true" />
+		        <p:menuitem value="Contas a Receber" disabled="true" />
+	        </p:menu>	
+					
+		</h:form>
+	</div>	
+	
+	<!-- 
+	<i class="fa fa-leaf fa-6" style="color: #1BBC9B; font-size: 16px;" ></i>
+			<h:outputText value="Clean" style="font-family: Helvetica; margin-left: 5px; font-size: 16px; color: #777777; font-weight: bold;" />
+			<h:outputText value="Work" style="font-family: Helvetica; font-size: 16px; color: #1BBC9B; font-weight: bold;" />
+	
+	 -->
+			 	
+</h:body>
+</html>

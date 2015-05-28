@@ -1,0 +1,193 @@
+@CHARSET "ISO-8859-1";
+
+.btn_principal {
+	height: 30px;	
+}
+/*
+.ui-layout-unit .ui-layout-unit-content{
+	overflow: hidden !important;
+}
+*/
+
+.ui-autocomplete {
+	display: initial;
+}
+	
+.altura {
+	height: calc(100vh - 105px);
+	overflow-y: auto;
+}
+
+.atual-header{
+	height: 55px; 
+	width: 100%; 
+	background: linear-gradient(to bottom, #1578c9 0%, #0b66b1 100%);
+	border-bottom: solid 1px #0b4170;
+	border-top: solid 1px #0b4170;
+	box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.4);
+	/*padding-top: 8px;
+	padding-bottom: 4px;			 	 	 	
+ 	background-color: #3399CC;*/ 	
+}
+
+.btn_menubar{
+	width: 90%; 
+	height: 33px;
+	margin-top: 5px;	
+	margin-left: 8px;
+	/*background: #3D3D3D !important; 
+	text-shadow: 0 1px 0 #000000;
+	color: #D9D9D9 !important;
+	border-left: transparent;
+	border-right: transparent;
+	border-top: transparent;*/
+}
+
+.ui-state-hover{
+	box-shadow: 0px 0px 8px #DBF4E7;
+	background: #63c59d -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.6)), to(rgba(255,255,255,0)));
+}
+
+.clean-menu{
+	height: 43px; 
+	background-color: #DDDDDD;
+}
+
+.btn_menu{
+	margin-top: 10px; 
+	margin-left: 15px;	
+}
+
+.btn-pesquisa-table{
+	float: right; 
+	margin-top: 10px; 
+	margin-right: 10px;
+}
+
+.input-text-table{
+	float: right; 
+	margin-top: 10px; 
+	margin-right: 5px;
+}
+
+.ui-growl-item-container {
+	opacity: 0.85 !important;   
+	position: absolute;
+}
+
+.ui-growl-item {
+	background: #31B599;
+    background: -moz-linear-gradient(center top , rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) repeat scroll 0 0 #31B599 !important;        
+    background: #31B599 -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0.25)), to(rgba(0,0,0,0)));
+    background: #31B599 -moz-linear-gradient(top, rgba(0,0,0,0.25), rgba(0,0,0,0));                      
+}
+
+.ui-growl {	
+	margin-left:auto !important;  
+	margin-right:auto !important;
+	/*right: 42% !important;*/	  
+	margin-top: 120px !important;
+}
+
+/*.ui-growl-title{
+	display: none;
+}*/
+
+
+.ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled {
+    background-image: none;
+    opacity: 0.55;   
+}
+
+.ui-menu.ui-widget li > .ui-menuitem-link.ui-state-hover {
+    background-color: #28C7A6;    
+    background-image: linear-gradient(to bottom, #28C7A6, #28C7A6);
+    background-position: 0 center;
+    background-repeat: repeat-x;
+    color: #FFFFFF;
+    text-decoration: none;
+    border: transparent;
+}
+
+.ui-datepicker .ui-datepicker-calendar .ui-state-default {
+	background: none;
+	border: none;
+	color: #4F4F4F;
+}
+
+.ui-datepicker .ui-datepicker-current-day .ui-state-highlight,.ui-datepicker .ui-datepicker-current-day .ui-state-default{
+	background: #28C7A6;
+	color: #FFFFFF !important;
+	font-weight: bold;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+/* Problema com size no browse 64bits*/
+.hasDatepicker{
+	width: 64px !important;
+}
+
+
+/*Usado para campo date desabilitado (obs usar class 'calendar' no campo)
+span[class^="calendar"] input{
+span[class*="calendar"] input{*/
+span.calendar input{
+	width: 64px !important;
+}	
+
+
+/* Problema com size no browse 64bits*/
+.hasTimepicker{
+	width: 34px !important;
+}
+
+.ui-datepicker td{
+	background-color: #F5F5F5;
+	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);	
+    border-radius: 4px !important;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+    color: #333333;
+    cursor: pointer;		
+}
+
+/*Layout da tela*/
+.ui-widget {
+	font-size: 12px !important;		
+}
+
+.ui-state-default {
+	font-weight: normal;		
+}
+
+.center{
+	text-align: center;
+				  
+}
+
+.right{
+	text-align: right;
+}
+
+
+.left{
+	text-align: left;
+}
+
+.button-search{
+	margin-left: 5px;
+	height: 24px;
+	width: 24px;
+	font-size: 10px;
+}
+
+h1 { font-size: 30px; margin-top: 5px; }
+h2 { font-size: 25px; margin-top: 5px; }	/* Padrao dos saldos/valores totais */
+h3 { font-size: 18px; margin-top: 5px; } /* Padrao dos sub-titulos */
+h4 { font-size: 14px; margin-top: 5px; } /* Padrao dos valores menores */
+h5 { font-size: 12px; margin-top: 5px; }
+h6 { font-size: 10px; margin-top: 5px; }
+

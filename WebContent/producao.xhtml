@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"	
+	xmlns:p="http://primefaces.org/ui">
+	
+<h:head>
+	<title><ui:insert name="title">Produção - CleanWork</ui:insert></title>	
+	<link rel="shortcut icon" href="img/favicon.ico" />
+</h:head>
+<h:body>
+
+	<ui:include src="header.xhtml" />
+	
+	<ui:include src="menu.xhtml" />
+	
+	<div id="layout-portlets-cover" class="fontRegular" >		
+			<h:form id="form_data_producao" >				
+			
+			<p:growl id="growl" autoUpdate="false" showDetail="true" />
+			
+			<div id="menu" class="clean-menu" >	
+				<h:panelGroup rendered="#{producaoBean.selectedProducao == null}" >			
+					<p:commandButton value="Novo" id="btn_novo" icon="fa fa-plus" process="@this" actionListener="#{producaoBean.novo}" update="form_data_producao" styleClass="btn_menu" ><p:resetInput target="form_data_producao" /></p:commandButton>											
+					<p:commandButton id="btn_atualizar" value="Atualizar" actionListener="#{producaoBean.atualizar}" icon="fa fa-refresh" process="@this" update="form_data_producao" styleClass="btn_menu" />
+					
+					<p:commandButton id="btn_search" title="Pesquisar" immediate="true" process="filtro" partialSubmit="true" icon="fa fa-search" styleClass="btn-pesquisa-table" />
+					<p:remoteCommand name="filtrar" process="filtro" />	
+					<p:inputText id="filtro" value="#{producaoBean.filtro}" placeholder="Pesquisar..."  onkeypress="if (event.keyCode == 13) { filtrar(); return false; }" styleClass="input-text-table" />
+				</h:panelGroup>
+				
+				<h:panelGroup rendered="#{producaoBean.selectedProducao != null}" >
+					<p:commandButton value="Salvar" id="btn_salvar" icon="fa fa-floppy-o" type="submit" actionListener="#{producaoBean.salvar(false)}" update="form_data_producao" styleClass="btn_menu" />
+					<p:commandButton value="Salvar e Voltar" id="btn_salvarvoltar" icon="fa fa-floppy-o" type="submit" actionListener="#{producaoBean.salvar(true)}" update="form_data_producao" styleClass="btn_menu" />
+					<p:commandButton value="Excluir" id="btn_excluir" icon="fa fa-trash-o" onclick="PF('confirmation_exc_producao').show();" styleClass="btn_menu" />
+					<p:commandButton value="Voltar" id="btn_voltar" icon="fa fa-undo" immediate="true" actionListener="#{producaoBean.atualizar}" update="form_data_producao :form_table_producao" styleClass="btn_menu" />						
+				</h:panelGroup>											
+			</div>
+			
+			<p:panel rendered="#{producaoBean.selectedProducao != null}" styleClass="altura" >				    	
+	        	<div class="row" >
+			    	<div class="three columns">
+			    		<p:outputLabel value="Número" />
+			    		<p:inputText id="numero" value="#{producaoBean.selectedProducao.id_producao}" disabled="true" styleClass="u-full-width center" />	
+			    	</div>
+			    	<div class="three columns">
+			    		<p:outputLabel value="Data" />
+			    		<p:calendar id="data" value="#{producaoBean.selectedProducao.data}" styleClass="u-full-width" />	
+			    	</div>
+			    	<div class="three columns">
+			    		<p:outputLabel value="Situação" />
+			    		<p:selectOneMenu id="cond_pagto" value="#{producaoBean.selectedProducao.situacao}" styleClass="u-full-width" >
+			        		<f:selectItem itemValue="1" itemLabel="Pendente" />
+							<f:selectItem itemValue="2" itemLabel="Em Produção" />
+							<f:selectItem itemValue="3" itemLabel="Concluída" />
+							<f:selectItem itemValue="4" itemLabel="Cancelada" />														
+							<p:ajax event="valueChange" process="@this" />																	     							           			                			                			                  			               			              	                				                
+			            </p:selectOneMenu>	
+			    	</div>
+			    	<div class="three columns">
+			    		<p:outputLabel value="Quantidade" />
+			    		<p:inputText value="#{producaoBean.selectedProducao.qtd}" autocomplete="off" styleClass="u-full-width" >
+			        		<f:convertNumber groupingUsed="true" minFractionDigits="0" maxFractionDigits="0" />
+			        		<p:ajax event="valueChange" process="@this" update="@this" />							
+						</p:inputText>	
+			    	</div>
+			    </div>	
+	        	 
+	        	<div class="row" >
+	        		<div class="nine columns">
+	        			<p:outputLabel value="Produto" />
+	        			<h:panelGroup id="dados_produto">					
+							<p:inputText id="cod_produto" disabled="true" value="#{producaoBean.selectedProducao.produto.id_produto}" styleClass="u-full-width-codigo center" />														  																		
+							<p:autoComplete id="desc_produto" widgetVar="desc_produto" value="#{producaoBean.selectedProducao.produto}" completeMethod="#{producaoBean.completeProduto}" var="p" required="true" requiredMessage="Produto não foi informado!"
+								            itemLabel="#{p.descricao}" itemValue="#{p}" converter="produto" forceSelection="true" maxResults="10" styleClass="u-full-width-menos-codigo-search" >							
+								<p:ajax event="itemSelect" listener="#{producaoBean.handleSelectProduto}" update="cod_produto" />															
+								<p:column>#{p.id_produto}</p:column>
+								<p:column>#{p.descricao}</p:column>																	 					
+							</p:autoComplete>		
+						</h:panelGroup>			
+						<p:commandButton icon="ui-icon-search" update=":form_pesquisa_generica" actionListener="#{producaoBean.openPesquisaGenerica}" oncomplete="PF('data_table_pesquisa_generica').clearFilters(); PF('pesquisa_generica_dialog').show();" immediate="true" styleClass="button-search" ><f:attribute name="parameter" value="produtofinal"/></p:commandButton>
+	        		</div>	
+	        		<div class="three columns">
+	        			<p:outputLabel value="Ficha Técnica" />
+	        			<p:selectOneMenu id="ficha_tecnica" value="#{producaoBean.selectedProducao.fichaTecnica}" required="true" converter="fichatecnica" requiredMessage="A Ficha Técnica da produção não foi informada!" styleClass="u-full-width" >
+			        		<f:selectItems value="#{producaoBean.fichaTecnicas}" var="ficha" itemLabel="#{ficha.codigo} - #{ficha.descricao}" itemValue="#{ficha}" />																			
+							<p:ajax event="valueChange" process="@this" />																	     							           			                			                			                  			               			              	                				                
+			            </p:selectOneMenu>
+	        		</div>
+	        	</div>				
+	        </p:panel>	
+		</h:form>
+		
+		<h:form id="form_table_producao" >
+			<p:dataTable var="entrada" emptyMessage="Nenhuma produção encontrada..."
+					scrollable="true"
+			 		value="#{producaoBean.producaos}"
+					rowKey="#{entrada.id_producao}" 
+					selection="#{producaoBean.selectedProducao}"
+					selectionMode="single" 
+			 		rendered="#{producaoBean.selectedProducao == null}" 
+			 		scrollHeight="100%" 
+					styleClass="altura" >
+			 	
+				<p:ajax event="rowSelect" listener="#{producaoBean.onRowSelect}" />
+			 		
+			    <p:column headerText="Número" width="40" sortBy="#{entrada.id_producao}" styleClass="center" ><h:outputText value="#{entrada.id_producao}" /></p:column>
+			    <p:column headerText="Situação" width="80" sortBy="#{entrada.situacaoDescricao}" styleClass="center" ><span style="padding: 2px; color: #FFFFFF; border-radius: 5px; background: #{entrada.situacaoCor};" ><h:outputText value="#{entrada.situacaoDescricao}" /></span></p:column>	
+			    <p:column headerText="Produto" width="350" sortBy="#{entrada.produto.descricao}" ><h:outputText value="#{entrada.produto.descricao}" /></p:column>
+			    <p:column headerText="Data" width="100" sortBy="#{entrada.data}" styleClass="center" ><h:outputText value="#{entrada.data}" ><f:convertDateTime pattern="dd/MM/yyyy"/></h:outputText></p:column>			 
+			    <p:column headerText="Quantidade" width="100" sortBy="#{entrada.qtd}" style="text-align: right;" ><h:outputText value="#{entrada.qtd}" ><f:convertNumber minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="12" /></h:outputText></p:column>			 				    
+			</p:dataTable>
+		</h:form>
+		
+	</div>
+			
+	<h:form id="dlg_exc_producao">
+		<p:confirmDialog message="Deseja realmente excluir esta produção?" hideEffect="explode" header="Aviso" severity="alert" widgetVar="confirmation_exc_producao" modal="true" >							
+			<p:commandButton value="Sim" oncomplete="PF('confirmation_exc_producao').hide();" actionListener="#{producaoBean.excluir}" update=":form_data_producao :form_table_producao" />						
+			<p:commandButton value="Não" onclick="PF('confirmation_exc_producao').hide();" />							
+		</p:confirmDialog>
+	</h:form>
+	
+	<!-- Tabela de pesquisa generica -->
+    <h:form id="form_pesquisa_generica">
+		<p:dialog  header="#{producaoBean.pesquisaGenericaTable.pesquisaHeader}"  widgetVar="pesquisa_generica_dialog"  id="pesquisa_generica_dialog" resizable="false"  draggable="false" modal="true">				
+	        <p:dataTable  widgetVar="data_table_pesquisa_generica" tableStyle="width:auto;"   var="data" value="#{producaoBean.pesquisaGenericaTable.pesquisaGenericaDados}" rowKey="#{data.id_registro}" selection="#{producaoBean.selectedPesquisaGenericaDados}" selectionMode="single" emptyMessage="Nenhum registro encontrado!"	liveScroll="true" scrollRows="100" scrollHeight="250" scrollable="true" filteredValue="#{producaoBean.filteredpesquisaGenericaDados}" >		                	     
+				<p:columns value="#{producaoBean.pesquisaGenericaTable.pesquisaGenericacolumns}" var="column" width="#{column.width}" columnIndexVar="colIndex"  sortBy="#{data[column.property]}" filterBy="#{data[column.property]}" filterStyle="display: block;" ><f:facet name="header"> #{column.header}</f:facet>#{data[column.property]}</p:columns>  	            
+	        </p:dataTable><br/>		        	     								
+			<p:commandButton value="Selecionar" actionListener="#{producaoBean.pesquisaGenericaSelect}" update="pesquisa_generica_dialog" />
+        </p:dialog>
+     </h:form>
+
+</h:body>
+</html>

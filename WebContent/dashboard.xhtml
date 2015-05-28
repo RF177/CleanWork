@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title><ui:insert name="title">CleanWork</ui:insert></title>
+	<link rel="shortcut icon" href="img/favicon.ico" />
+</h:head>
+<h:body>
+
+	<ui:include src="header.xhtml" />
+	
+	<ui:include src="menu.xhtml" />
+	
+	<div id="layout-portlets-cover" class="fontRegular" >
+		
+		<p:panel style="height: calc(100vh - 62px); overflow-y: auto;" >
+			<center>
+				<div class="row" >		
+			        <p:chart type="line" model="#{dashboardBean.compras_vendas}" style="width: 90%; margin-top: 5px; height: 280px" />			    
+				</div>
+				 
+				<div class="row" style="margin-top: 20px;" >
+				    <div class="six columns">	
+				    	<p:chart type="bar" model="#{dashboardBean.producao}" style="width: 93%; height: 280px" />
+				    </div>
+				    <div class="six columns">
+				    	<p:chart type="pie" model="#{dashboardBean.financeiro}" style="width: 93%; height: 280px" />
+				    </div>			    			    
+				</div>		
+			</center>
+		</p:panel>	
+	</div>
+</h:body>
+</html>

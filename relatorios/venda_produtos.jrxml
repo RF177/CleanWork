@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
+<!-- 2015-04-25T10:01:09 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelEmissaoPedido_produtos" pageWidth="555" pageHeight="160" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="2682fe56-1e35-49e8-888b-5135c39e11e7">
+	<property name="ireport.zoom" value="1.53947435469212"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
+	<parameter name="id_venda" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+
+f.id_produto as item_codigo,
+f.descricao as item_descricao,
+b.qtd as item_qtd,
+b.vl_unitario as item_preco_uni,
+b.vl_total as item_total
+
+FROM vendas a, vendaitem b, produtos f
+
+WHERE a.id_venda =  b.id_venda
+AND f.id_produto = b.id_produto
+AND a.id_venda = $P{id_venda}]]>
+	</queryString>
+	<field name="ITEM_CODIGO" class="java.math.BigDecimal"/>
+	<field name="ITEM_DESCRICAO" class="java.lang.String"/>
+	<field name="ITEM_QTD" class="java.lang.Double"/>
+	<field name="ITEM_PRECO_UNI" class="java.lang.Double"/>
+	<field name="ITEM_TOTAL" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField pattern="#,##0.0000;-#,##0.0000">
+				<reportElement x="374" y="0" width="60" height="12" uuid="04b17aff-9715-432c-8164-05363ecc61d6">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ITEM_QTD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="34" y="0" width="340" height="12" uuid="24fe8534-5c7c-40b5-b9b2-cfcccae5d51a"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ITEM_DESCRICAO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="433" y="0" width="60" height="12" uuid="08ecf587-58b2-4ca2-b814-f56a19f25c17">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ITEM_PRECO_UNI}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="492" y="0" width="60" height="12" uuid="9ff76e41-7b75-4be7-87cc-4a704db0e40d">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ITEM_TOTAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="0" width="32" height="12" uuid="24fe8534-5c7c-40b5-b9b2-cfcccae5d51a"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ITEM_CODIGO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

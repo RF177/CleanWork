@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"	
+	xmlns:p="http://primefaces.org/ui">
+	
+<h:head>
+	<title><ui:insert name="title">Ficha Técnica - CleanWork</ui:insert></title>
+	<link rel="shortcut icon" href="img/favicon.ico" />	
+</h:head>
+<h:body>
+
+	<ui:include src="header.xhtml" />
+	
+	<ui:include src="menu.xhtml" />
+	
+	<div id="layout-portlets-cover" class="fontRegular" >			
+		<h:form id="form_data_fichatecnica" >				
+			
+			<p:growl id="growl" autoUpdate="false" showDetail="true" />
+				
+			<div id="menu" class="clean-menu" >	
+				<h:panelGroup rendered="#{fichaTecnicaBean.selectedFichaTecnica == null}" >			
+					<p:commandButton id="btn_novo" value="Novo" styleClass="btn_menu" icon="fa fa-plus" process="@this" actionListener="#{fichaTecnicaBean.novo}" update="form_data_fichatecnica" ><p:resetInput target="form_data_fichatecnica" /></p:commandButton>
+					<p:commandButton id="btn_atualizar" value="Atualizar" actionListener="#{fichaTecnicaBean.atualizar}" icon="fa fa-refresh" process="@this" update="form_data_fichatecnica" styleClass="btn_menu" />											
+					
+					<p:commandButton id="btn_search" title="Pesquisar" immediate="true" process="filtro" partialSubmit="true" icon="fa fa-search" styleClass="btn-pesquisa-table" />
+					<p:remoteCommand name="filtrar" process="filtro" />	
+					<p:inputText id="filtro" value="#{fichaTecnicaBean.filtro}" placeholder="Pesquisar..."  onkeypress="if (event.keyCode == 13) { filtrar(); return false; }" styleClass="input-text-table" />
+				</h:panelGroup>
+				
+				<h:panelGroup rendered="#{fichaTecnicaBean.selectedFichaTecnica != null}" >
+					<p:commandButton value="Salvar" id="btn_salvar" icon="fa fa-floppy-o" type="submit" actionListener="#{fichaTecnicaBean.salvar(false)}" update="form_data_fichatecnica" styleClass="btn_menu" />
+					<p:commandButton value="Salvar e Voltar" id="btn_salvarvoltar" icon="fa fa-floppy-o" type="submit" actionListener="#{fichaTecnicaBean.salvar(true)}" update="form_data_fichatecnica" styleClass="btn_menu" />
+					<p:commandButton value="Excluir" id="btn_excluir" icon="fa fa-trash-o" onclick="PF('confirmation_exc_produto').show();" styleClass="btn_menu" />
+					<p:commandButton value="Voltar" id="btn_voltar" icon="fa fa-undo" immediate="true" actionListener="#{fichaTecnicaBean.atualizar}" update="form_data_fichatecnica :form_table_fichatecnica" styleClass="btn_menu" />						
+				</h:panelGroup>											
+			</div>
+			
+			<p:panel rendered="#{fichaTecnicaBean.selectedFichaTecnica != null}" styleClass="altura" >				    	
+	        	 
+	        	<div class="row" >
+			    	<div class="two columns">
+			    		<p:outputLabel value="Código" />
+			    		<p:inputText id="codigo" value="#{fichaTecnicaBean.selectedFichaTecnica.codigo}" required="true" requiredMessage="Código da ficha técnica não foi informado!" styleClass="u-full-width center" >
+		        			<f:convertNumber integerOnly="true" />
+		        			<p:ajax event="valueChange" process="@this" update="@this" />
+		        		</p:inputText>			
+			    	</div>
+			    	<div class="ten columns">
+			    		<p:outputLabel value="Descrição" />
+			    		<p:inputText id="descricao" value="#{fichaTecnicaBean.selectedFichaTecnica.descricao}" autocomplete="off" required="true" requiredMessage="Descrição da ficha técnica não foi informado!" styleClass="u-full-width" >
+		        			<p:ajax event="valueChange" process="@this" />
+		        		</p:inputText>			
+			    	</div>
+			    </div>	
+	        	
+	        	<div class="row" >
+	        		<p:outputLabel value="Produto" />
+					<h:panelGroup id="dados_produto">					
+						<p:inputText id="cod_produto" disabled="true" value="#{fichaTecnicaBean.selectedFichaTecnica.produto.id_produto}" styleClass="u-full-width-codigo center" />														  																		
+						<p:autoComplete id="desc_produto" widgetVar="desc_produto" value="#{fichaTecnicaBean.selectedFichaTecnica.produto}" completeMethod="#{fichaTecnicaBean.completeProduto}" var="p" required="true" requiredMessage="Produto não informado"
+							            itemLabel="#{p.descricao}" itemValue="#{p}" converter="produto" forceSelection="true" maxResults="10" styleClass="u-full-width-menos-codigo-search" >							
+							<p:ajax event="itemSelect" listener="#{fichaTecnicaBean.handleSelectProduto}" update="cod_produto" />															
+							<p:column>#{p.id_produto}</p:column>
+							<p:column>#{p.descricao}</p:column>																	 					
+						</p:autoComplete>		
+					</h:panelGroup>			
+					<p:commandButton icon="ui-icon-search" update=":form_pesquisa_generica" actionListener="#{fichaTecnicaBean.openPesquisaGenerica}" oncomplete="PF('data_table_pesquisa_generica').clearFilters(); PF('pesquisa_generica_dialog').show();" immediate="true" styleClass="button-search" ><f:attribute name="parameter" value="produtofinal"/></p:commandButton>		        		
+	        	</div> 
+	       		
+	       		<div class="row" >
+			    	<div class="four columns">
+			    		<p:outputLabel value="Custos de Mão de Obra" />
+			    		<p:inputText value="#{fichaTecnicaBean.selectedFichaTecnica.custo_maodeobra}" styleClass="u-full-width" >
+			        		<f:convertNumber groupingUsed="true" minFractionDigits="2" />
+			        		<p:ajax event="valueChange" process="@this" update="@this total total_materiais" listener="#{fichaTecnicaBean.calculaCustoTotal}" />							
+						</p:inputText>	
+			    	</div>
+			    	<div class="four columns">
+			    		<p:outputLabel value="Gastos Gerais de Fabricação" />
+			    		<p:inputText value="#{fichaTecnicaBean.selectedFichaTecnica.custo_ggf}" styleClass="u-full-width" >
+			        		<f:convertNumber groupingUsed="true" minFractionDigits="2" />
+			        		<p:ajax event="valueChange" process="@this" update="@this total total_materiais" listener="#{fichaTecnicaBean.calculaCustoTotal}" />							
+						</p:inputText>	
+			    	</div>
+			    	<div class="four columns">
+			    		<p:outputLabel value="Outros Custos" />
+			    		<p:inputText value="#{fichaTecnicaBean.selectedFichaTecnica.custo_outros}" id="preco_venda" styleClass="u-full-width" >
+			        		<f:convertNumber groupingUsed="true" minFractionDigits="2" />
+			        		<p:ajax event="valueChange" process="@this" update="@this total total_materiais" listener="#{fichaTecnicaBean.calculaCustoTotal}" />							
+						</p:inputText>	
+			    	</div>
+			    </div>	
+	        	
+	        	<br/>
+	      
+	      		<div class="row">
+	      			<p:dataTable id="table_insumos" widgetVar="table_insumo" var="insumo" 
+		        		value="#{fichaTecnicaBean.selectedFichaTecnica.insumos}"
+						rowKey="#{insumo.id_insumo}" 
+						emptyMessage="Nenhum insumo cadastrado..."		
+						liveScroll="false" 
+						scrollable="true"
+						scrollHeight="100%"
+						style="height: calc(100vh - 370px);" >
+						
+						<f:facet name="header">Composição do Produto</f:facet>	
+		            	<p:column headerText="Produto" style="width: 400px;" sortBy="#{insumo.produto.descricao}" ><h:outputText value="#{insumo.produto.id_produto} - #{insumo.produto.descricao}" /></p:column>
+		            	<p:column headerText="Quantidade" style="width: 150px;" styleClass="center" sortBy="#{insumo.qtd}" ><h:outputText value="#{insumo.qtd}" ><f:convertNumber minFractionDigits="2" maxIntegerDigits="12" /></h:outputText></p:column>
+		            	<p:column headerText="Custo Unitário" style="width: 150px;" styleClass="center" sortBy="#{insumo.vl_custo}" ><h:outputText value="#{insumo.vl_custo}" ><f:convertNumber minFractionDigits="2" maxIntegerDigits="12" /></h:outputText></p:column>			 
+					    <p:column headerText="Custo Total" style="width: 150px; text-align: right;" sortBy="#{insumo.vl_total}" ><h:outputText value="#{insumo.vl_total}" ><f:convertNumber minFractionDigits="2" maxIntegerDigits="12" /></h:outputText></p:column>
+					    
+					    <p:column style="width: 10px;" styleClass="center" >  									            				            		   		            				                   
+				            <p:commandButton update=":form_data_insumo" oncomplete="PF('insumo_dialog').show();" style="height: 18px; width: 18px; font-size: 10px;" icon="ui-icon-pencil" immediate="true"  title="Alterar/Visualizar" >  			               
+				               <f:setPropertyActionListener value="#{insumo}" target="#{fichaTecnicaBean.selectedInsumo}" />	                  
+				            </p:commandButton>				            				            	        
+				        </p:column>
+																													
+				        <p:column style="width: 10px;" styleClass="center" >  									            				            		   		            				                   
+				            <p:commandButton style="height: 18px; width: 18px; font-size: 10px;" icon="ui-icon-trash" immediate="true" onclick="PF('confirmation_exc_insumo').show()" title="Excluir" >  			               
+				               <f:setPropertyActionListener value="#{insumo}" target="#{fichaTecnicaBean.selectedInsumo}" />	                  
+				            </p:commandButton>			            				            	        
+				        </p:column>					    			
+		            </p:dataTable>
+		         </div>   
+		         
+		         <div class="row" >
+	            	<div class="two columns">
+			            <p:commandButton value="Adicionar Insumo" process="@this" actionListener="#{fichaTecnicaBean.novoInsumo}" oncomplete="PF('insumo_dialog').show();" update=":form_data_insumo" styleClass="u-full-width" style="margin-top: 15px;" >
+							<p:resetInput target=":form_data_insumo" /> 
+				    	</p:commandButton>
+			    	</div>
+			    	
+			    	<div class="six columns">
+			    		<h:outputLabel value="" />
+			    	</div>
+		    	
+		    		<div class="two columns">
+			    		<h:outputLabel value="Custo dos Materiais" />				    	
+				    	<h3>
+							<h:outputText id="total_materiais" value="#{fichaTecnicaBean.selectedFichaTecnica.custo_materiais}" ><f:convertNumber  minFractionDigits="2" maxIntegerDigits="12" /></h:outputText>						   						   																				
+						</h3>				
+					</div>
+		    	
+		    		<div class="two columns">
+			        	<h:outputLabel value="Custo Total" />					   																	
+						<h2>
+							<h:outputText id="total" value="#{fichaTecnicaBean.selectedFichaTecnica.custo_total}" ><f:convertNumber  minFractionDigits="2" maxIntegerDigits="12" /></h:outputText>
+						</h2>
+					</div>			    	
+				</div>	    		        		        		        	  		        
+        	</p:panel>	
+		</h:form>
+		
+		<h:form id="form_table_fichatecnica" >
+			<p:dataTable var="ficha" emptyMessage="Nenhuma ficha técnica encontrada..."
+					scrollable="true"
+			 		value="#{fichaTecnicaBean.fichaTecnicas}"
+					rowKey="#{ficha.id_fichatecnica}" 
+					selection="#{fichaTecnicaBean.selectedFichaTecnica}"
+					selectionMode="single" 
+			 		rendered="#{fichaTecnicaBean.selectedFichaTecnica == null}" 
+			 		scrollHeight="100%" 
+					styleClass="altura" >
+			 	
+				<p:ajax event="rowSelect" listener="#{fichaTecnicaBean.onRowSelect}" />
+			 		
+			    <p:column headerText="Código" width="35" sortBy="#{ficha.codigo}" styleClass="center" ><h:outputText value="#{ficha.codigo}" /></p:column>	
+			    <p:column headerText="Descrição" width="250" sortBy="#{ficha.descricao}" ><h:outputText value="#{ficha.descricao}" /></p:column>
+			    <p:column headerText="Produto" width="300" sortBy="#{ficha.produto.descricao}" styleClass="center" ><h:outputText value="#{ficha.produto.descricao}" /></p:column>			 
+			    <p:column headerText="Custo" width="100" sortBy="#{ficha.custo_total}" styleClass="center" ><h:outputText value="#{ficha.custo_total}" ><f:convertNumber minFractionDigits="2" maxIntegerDigits="12" /></h:outputText></p:column>				    			 				    
+			</p:dataTable>
+		</h:form>		
+	</div>
+	
+	<h:form id="form_data_insumo">	
+ 		<p:dialog header="Material" widgetVar="insumo_dialog" id="insumo_dialog" width="500" resizable="false" draggable="true" modal="true">
+					  	
+			<p:ajax event="close" update="form_data_insumo"/>  											
+			<p:messages id="messages_insumo" closable="true" />
+			
+			<p:panel id="panel_insumo">
+				
+				<div class="row" >
+				    <h:outputLabel value="Produto"/>
+				    <h:panelGroup id="dados_produto_insumo">					
+						<p:inputText id="cod_produto_insumo" disabled="true" value="#{fichaTecnicaBean.selectedInsumo.produto.id_produto}" styleClass="u-full-width-codigo center" />
+						<p:autoComplete id="descr_produto_item" widgetVar="descr_produto_insumo" value="#{fichaTecnicaBean.selectedInsumo.produto}" completeMethod="#{fichaTecnicaBean.completeProdutoInsumo}" var="p" required="true" requiredMessage="Produto não informado" 
+							 	        itemLabel="#{p.descricao}" itemValue="#{p}" converter="produto" forceSelection="true" maxResults="10" styleClass="u-full-width-menos-codigo-search" >							
+							<p:ajax event="itemSelect" listener="#{fichaTecnicaBean.handleSelectProdutoInsumo}" update="cod_produto_insumo bloco_custo" />															
+							<p:column>#{p.id_produto}</p:column>
+							<p:column>#{p.descricao}</p:column>																	 					
+						</p:autoComplete>		
+					</h:panelGroup>				
+					<p:commandButton icon="ui-icon-search" update=":form_pesquisa_generica" actionListener="#{fichaTecnicaBean.openPesquisaGenerica}" oncomplete="PF('data_table_pesquisa_generica').clearFilters(); PF('pesquisa_generica_dialog').show();" immediate="true" styleClass="button-search" ><f:attribute name="parameter" value="produtoinsumo"/></p:commandButton>	
+				</div>    	
+				<h:panelGroup id="bloco_custo">
+					<div class="row" >
+					    <div class="four columns">
+					    	<h:outputLabel value="Quantidade" />
+					    	<p:inputText value="#{fichaTecnicaBean.selectedInsumo.qtd}" required="true" requiredMessage="Quantidade não informada" validatorMessage="Quantidade tem que ser maior que 0,01" styleClass="u-full-width" >
+				        		<f:convertNumber groupingUsed="true" minFractionDigits="2" />
+				        		<f:validateDoubleRange minimum="0.01" />
+				        		<p:ajax event="valueChange" process="@this" update="@this bloco_custo" listener="#{fichaTecnicaBean.calculaCustoInsumo}" />							
+							</p:inputText>
+					    </div>
+					    
+					    <div class="two columns">
+					    	<h:outputLabel value="" />
+					    </div>	
+					    
+				        <div class="three columns">
+					    	<h:outputLabel value="Custo" />			 						
+					    	<h3>					 							
+								<h:outputText value="#{fichaTecnicaBean.selectedInsumo.vl_custo}" ><f:convertNumber minFractionDigits="2" maxIntegerDigits="12" /></h:outputText>
+							</h3>  						 							
+					    </div>
+					    
+					    <div class="three columns">
+			 		 		<h:outputLabel value="Custo Total" />
+			 		 		<h3>			 											 							
+								<h:outputText value="#{fichaTecnicaBean.selectedInsumo.vl_total}" ><f:convertNumber minFractionDigits="2" maxIntegerDigits="12" /></h:outputText>
+							</h3>	
+					    </div>				    
+					</div>
+				</h:panelGroup>	    														
+			</p:panel>
+			<br/>									
+			<p:commandButton value="Salvar" type="submit" actionListener="#{fichaTecnicaBean.salvaInsumo}" update="panel_insumo messages_insumo" />			
+			<br/>
+		</p:dialog>
+	</h:form>
+		
+	<h:form id="dlg_exc_produto">
+		<p:confirmDialog message="Deseja realmente excluir este produto?" hideEffect="explode" header="Aviso" severity="alert" widgetVar="confirmation_exc_produto" modal="true" >							
+			<p:commandButton value="Sim" oncomplete="PF('confirmation_exc_produto').hide();" actionListener="#{fichaTecnicaBean.excluir}" update=":form_data_fichatecnica :form_table_fichatecnica" />						
+			<p:commandButton value="Não" onclick="PF('confirmation_exc_produto').hide();" />							
+		</p:confirmDialog>
+	</h:form>
+	
+	<h:form id="dlg_exc_produto_insumo">
+		<p:confirmDialog message="Deseja realmente excluir este insumo?" hideEffect="explode" header="Aviso" severity="alert" widgetVar="confirmation_exc_insumo" modal="true" >							
+			<p:commandButton value="Sim" oncomplete="PF('confirmation_exc_insumo').hide();" actionListener="#{fichaTecnicaBean.excluiInsumo}" update=":form_data_fichatecnica :form_table_fichatecnica" />						
+			<p:commandButton value="Não" onclick="PF('confirmation_exc_insumo').hide();" />							
+		</p:confirmDialog>
+	</h:form>
+
+	<!-- Tabela de pesquisa generica -->
+    <h:form id="form_pesquisa_generica">
+		<p:dialog  header="#{fichaTecnicaBean.pesquisaGenericaTable.pesquisaHeader}"  widgetVar="pesquisa_generica_dialog"  id="pesquisa_generica_dialog" resizable="false"  draggable="false" modal="true">				
+	        <p:dataTable  widgetVar="data_table_pesquisa_generica" tableStyle="width:auto;"   var="data" value="#{fichaTecnicaBean.pesquisaGenericaTable.pesquisaGenericaDados}" rowKey="#{data.id_registro}" selection="#{fichaTecnicaBean.selectedPesquisaGenericaDados}" selectionMode="single" emptyMessage="Nenhum registro encontrado!"	liveScroll="true" scrollRows="100" scrollHeight="250" scrollable="true" filteredValue="#{fichaTecnicaBean.filteredpesquisaGenericaDados}" >		                	     
+				<p:columns value="#{fichaTecnicaBean.pesquisaGenericaTable.pesquisaGenericacolumns}" var="column" width="#{column.width}" columnIndexVar="colIndex"  sortBy="#{data[column.property]}" filterBy="#{data[column.property]}" filterStyle="display: block;" ><f:facet name="header"> #{column.header}</f:facet>#{data[column.property]}</p:columns>  	            
+	        </p:dataTable><br/>		        	     								
+			<p:commandButton value="Selecionar" actionListener="#{fichaTecnicaBean.pesquisaGenericaSelect}" update="pesquisa_generica_dialog" />
+        </p:dialog>
+     </h:form>
+
+</h:body>
+</html>

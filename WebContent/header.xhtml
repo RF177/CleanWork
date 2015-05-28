@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	
+</h:head>
+<h:body>
+	<div id="layout-header" class="Unselectable fontRegular" >
+		<h:panelGroup styleClass="layout-logo" >
+			   
+			<i class="fa fa-leaf fa-6 softgreen" style="float: left; margin-right: 3px;" />
+			<h:outputText value="CLEAN" styleClass="whitegreen fontSemiboldItalic Fs19 Fleft" />
+			<h:outputText value="WORK" styleClass="softgreen fontSemiboldItalic Fs19 Fleft" />
+			
+			<!-- 
+			<p:graphicImage width="80" height="35" value="/img/logo2.png" style="margin-top: -8px; margin-left: 20px;" />
+			 -->     
+		</h:panelGroup>
+		
+		<div id="sm-topmenu" class="layout-header-widgets white Fs14" >
+			
+			<p:button href="usuario.jsf" icon="fa fa-user" title="Usuário" styleClass="HardGreenButton Fleft BordRadHalf TexAlCenter" style="font-size: 14px !important; margin-left: 3px; margin-top: 8px; color: #8BD8B1; border: none;"  />
+			
+			<p:button href="sobre.jsf" icon="fa fa-question" title="Sobre" styleClass="HardGreenButton Fleft BordRadHalf TexAlCenter" style="font-size: 14px !important; margin-left: 3px; margin-top: 8px; color: #8BD8B1; border: none;" />
+			
+			<p:button href="login.jsf" icon="fa fa-power-off" title="Sair" styleClass="HardGreenButton Fleft BordRadHalf TexAlCenter" style="font-size: 14px !important; margin-left: 3px; margin-top: 8px; color: #8BD8B1; border: none;" />	
+			
+		</div>
+		
+	</div>	 	
+</h:body>
+</html>

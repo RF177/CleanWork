@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"	
+	xmlns:p="http://primefaces.org/ui">
+	
+<h:head>
+	<title><ui:insert name="title">Produtos - CleanWork</ui:insert></title>
+	<link rel="shortcut icon" href="img/favicon.ico" />	
+</h:head>
+<h:body>
+
+	<ui:include src="header.xhtml" />
+	
+	<ui:include src="menu.xhtml" />
+	
+	<div id="layout-portlets-cover" class="fontRegular" >			
+		<h:form id="form_data_produto" >				
+			
+			<p:growl id="growl" autoUpdate="false" showDetail="true" />
+			
+			<div id="menu" class="clean-menu" >		
+				<h:panelGroup rendered="#{produtoBean.selectedProduto == null}" >			
+					<p:commandButton value="Novo" id="btn_novo" icon="fa fa-plus" process="@this" actionListener="#{produtoBean.novo}" update="form_data_produto" styleClass="btn_menu" ><p:resetInput target="form_data_produto" /></p:commandButton>
+					<p:commandButton id="btn_atualizar" value="Atualizar" actionListener="#{produtoBean.atualizar}" icon="fa fa-refresh" process="@this" update="form_data_produto" styleClass="btn_menu" />											
+					
+					<p:commandButton id="btn_search" title="Pesquisar" immediate="true" process="filtro" partialSubmit="true" icon="fa fa-search" styleClass="btn-pesquisa-table" />
+					<p:remoteCommand name="filtrar" process="filtro" />	
+					<p:inputText id="filtro" value="#{produtoBean.filtro}" placeholder="Pesquisar..."  onkeypress="if (event.keyCode == 13) { filtrar(); return false; }" styleClass="input-text-table" />
+				</h:panelGroup>
+				
+				<h:panelGroup rendered="#{produtoBean.selectedProduto != null}" >
+					<p:commandButton value="Salvar" id="btn_salvar" icon="fa fa-floppy-o" type="submit" actionListener="#{produtoBean.salvar(false)}" update="form_data_produto" styleClass="btn_menu" />
+					<p:commandButton value="Salvar e Voltar" id="btn_salvarvoltar" icon="fa fa-floppy-o" type="submit" actionListener="#{produtoBean.salvar(true)}" update="form_data_produto" styleClass="btn_menu" />
+					<p:commandButton value="Excluir" id="btn_excluir" icon="fa fa-trash-o" onclick="PF('confirmation_exc_produto').show();" styleClass="btn_menu" />
+					<p:commandButton value="Voltar" id="btn_voltar" icon="fa fa-undo" immediate="true" actionListener="#{produtoBean.atualizar}" update="form_data_produto :form_table_produto" styleClass="btn_menu" />						
+				</h:panelGroup>											
+			</div>
+			
+			<p:panel rendered="#{produtoBean.selectedProduto != null}" styleClass="altura" >				    	
+	        	 
+	       		<div class="row" >
+			    	<div class="two columns">
+			    		<p:outputLabel value="Código" />
+			    		<p:inputText id="codigo" disabled="true" value="#{produtoBean.selectedProduto.id_produto}" styleClass="u-full-width center" />	
+			    	</div>
+			    	<div class="ten columns">
+			    		<p:outputLabel value="Descrição" />
+			    		<p:inputText id="descricao" value="#{produtoBean.selectedProduto.descricao}" autocomplete="off" required="true" requiredMessage="Descrição do produto não foi informado!" styleClass="u-full-width" >
+		        			<p:ajax event="valueChange" process="@this" />
+		        		</p:inputText>	
+			    	</div>
+	        	</div>
+	        	
+	        	<div class="row" >
+	        		<div class="three columns">
+	        			<p:outputLabel value="Tipo" />
+	        			<p:selectOneMenu id="tipo" value="#{produtoBean.selectedProduto.tipo}" styleClass="u-full-width" >
+			        		<f:selectItem itemValue="1" itemLabel="Produto Final" />
+			        		<f:selectItem itemValue="2" itemLabel="Matéria-Prima" />							
+							<p:ajax event="valueChange" process="@this" update="label_precovenda preco_venda label_taxalucro taxa_lucro preco_custo label_sugestao_precovenda sugestao_preco_venda" />																	     							           			                			                			                  			               			              	                				                
+			            </p:selectOneMenu>
+	        		</div>
+	        		<div class="three columns">
+	        			<p:outputLabel value="Preço de Custo" />
+	        			<p:inputText value="#{produtoBean.selectedProduto.preco_custo}" id="preco_custo" styleClass="u-full-width" >
+			        		<f:convertNumber groupingUsed="true" minFractionDigits="2" />
+			        		<p:ajax event="valueChange" process="@this" update="@this sugestao_preco_venda" listener="#{produtoBean.calculaSugestaoPrecoVenda}" />							
+						</p:inputText>
+	        		</div>
+	        		<div class="three columns">
+	        			<p:outputLabel value="Taxa de Lucro (%)" id="label_taxalucro" style="#{produtoBean.selectedProduto.tipo == 1 ? '' : 'display: none;'}" />
+	        			<p:inputText value="#{produtoBean.selectedProduto.taxa_lucro}" id="taxa_lucro" style="#{produtoBean.selectedProduto.tipo == 1 ? '' : 'display: none;'}" styleClass="u-full-width" >
+			        		<f:convertNumber groupingUsed="true" minFractionDigits="2" />
+			        		<p:ajax event="valueChange" process="@this" update="@this sugestao_preco_venda" listener="#{produtoBean.calculaSugestaoPrecoVenda}" />							
+						</p:inputText>
+	        		</div>
+	        		<div class="three columns">
+	        			<p:outputLabel value="Sugestão de Preço de Venda" id="label_sugestao_precovenda" style="#{produtoBean.selectedProduto.tipo == 1 ? '' : 'display: none;'}" />
+	        			<p:inputText value="#{produtoBean.sugestao_preco_venda}" id="sugestao_preco_venda" disabled="true" style="#{produtoBean.selectedProduto.tipo == 1 ? '' : 'display: none;'}" styleClass="u-full-width" >
+			        		<f:convertNumber groupingUsed="true" minFractionDigits="2" />
+			        		<p:ajax event="valueChange" process="@this" update="@this" />							
+						</p:inputText>
+	        		</div>
+	        	</div>
+	        	
+	        	<div class="row" >
+	        		<div class="three columns">
+	        			<p:outputLabel value="" />
+	        		</div>
+	        		<div class="three columns">
+	        			<p:outputLabel value="" />
+	        		</div>
+	        		<div class="three columns">
+	        			<p:outputLabel value="" />
+	        		</div>
+	        		<div class="three columns">
+	        			<p:outputLabel value="Preço de Venda" id="label_precovenda" style="#{produtoBean.selectedProduto.tipo == 1 ? '' : 'display: none;'}" />
+	        			<p:inputText value="#{produtoBean.selectedProduto.preco_venda}" id="preco_venda" style="#{produtoBean.selectedProduto.tipo == 1 ? '' : 'display: none;'}" styleClass="u-full-width" >
+			        		<f:convertNumber groupingUsed="true" minFractionDigits="2" />
+			        		<p:ajax event="valueChange" process="@this" update="@this" />							
+						</p:inputText>
+	        		</div>
+	        	</div> 			        		        	
+	        </p:panel>	
+		</h:form>
+		
+		<h:form id="form_table_produto" >
+			<p:dataTable var="produto" emptyMessage="Nenhum produto encontrado..."
+					scrollable="true"
+			 		value="#{produtoBean.produtos}"
+					rowKey="#{produto.id_produto}" 
+					selection="#{produtoBean.selectedProduto}"
+					selectionMode="single" 
+			 		rendered="#{produtoBean.selectedProduto == null}"
+			 		scrollHeight="100%" 
+					styleClass="altura" >
+			 	
+				<p:ajax event="rowSelect" listener="#{produtoBean.onRowSelect}" />
+			 		
+			    <p:column headerText="Código" width="35" sortBy="#{produto.id_produto}" styleClass="center" ><h:outputText value="#{produto.id_produto}" /></p:column>	
+			    <p:column headerText="Descrição" width="400" sortBy="#{produto.descricao}" ><h:outputText value="#{produto.descricao}" /></p:column>
+			    <p:column headerText="Tipo" width="150" sortBy="#{produto.tipoDescricao}" styleClass="center" ><h:outputText value="#{produto.tipoDescricao}" /></p:column>			 
+			    <p:column headerText="Custo" width="100" sortBy="#{produto.preco_custo}" styleClass="center" ><h:outputText value="#{produto.preco_custo}" ><f:convertNumber minFractionDigits="2" maxIntegerDigits="12" /></h:outputText></p:column>
+			    <p:column headerText="Preço" width="100" sortBy="#{produto.preco_venda}" styleClass="center" ><h:outputText value="#{produto.preco_venda}" ><f:convertNumber minFractionDigits="2" maxIntegerDigits="12" /></h:outputText></p:column>			 				    
+			</p:dataTable>
+		</h:form>
+	</div>
+		
+	<h:form id="dlg_exc_produto">
+		<p:confirmDialog message="Deseja realmente excluir este produto?" hideEffect="explode" header="Aviso" severity="alert" widgetVar="confirmation_exc_produto" modal="true" >							
+			<p:commandButton value="Sim" oncomplete="PF('confirmation_exc_produto').hide();" actionListener="#{produtoBean.excluir}" update=":form_data_produto :form_table_produto" />						
+			<p:commandButton value="Não" onclick="PF('confirmation_exc_produto').hide();" />							
+		</p:confirmDialog>
+	</h:form>
+
+</h:body>
+</html>

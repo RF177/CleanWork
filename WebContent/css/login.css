@@ -1,0 +1,25 @@
+@CHARSET "ISO-8859-1";
+
+.ui-widget-content{/* fundo do sistema */
+	background: #F7F7F7
+}
+
+.ui-widget {
+	font-size: 12px !important;		
+}
+
+.ui-state-default {
+	font-weight: normal;		
+}
+
+body {
+	background: #dfe0e2  url(../img/pattern.png) repeat;
+}
+
+/*
+.btn_principal {
+	color: #1BBC9B !important;
+	height: 30px;
+	font-weight: bold !important;
+}
+*/

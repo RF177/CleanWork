@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"	
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title><ui:insert name="title">Parceiros - CleanWork</ui:insert></title>
+	<link rel="shortcut icon" href="img/favicon.ico" />	
+</h:head>
+<h:body>
+
+	<ui:include src="header.xhtml" />
+	
+	<ui:include src="menu.xhtml" />
+	
+	<div id="layout-portlets-cover" class="fontRegular" >		
+		<h:form id="form_data_parceiro" >				
+			
+			<p:growl id="growl" autoUpdate="false" showDetail="true" />
+			
+			<div id="menu" class="clean-menu" >	
+				<h:panelGroup rendered="#{parceiroBean.selectedParceiro == null}" >			
+					<p:commandButton id="btn_novo" value="Novo" styleClass="btn_menu" icon="fa fa-plus" process="@this" actionListener="#{parceiroBean.novo}" update="form_data_parceiro" ><p:resetInput target="form_data_parceiro" /></p:commandButton>
+					<p:commandButton id="btn_atualizar" value="Atualizar" actionListener="#{parceiroBean.atualizar}" icon="fa fa-refresh" process="@this" update="form_data_parceiro" styleClass="btn_menu" />											
+					
+					<p:commandButton id="btn_search" title="Pesquisar" immediate="true" process="filtro" partialSubmit="true" icon="fa fa-search" styleClass="btn-pesquisa-table" />
+					<p:remoteCommand name="filtrar" process="filtro" />	
+					<p:inputText id="filtro" value="#{parceiroBean.filtro}" placeholder="Pesquisar..."  onkeypress="if (event.keyCode == 13) { filtrar(); return false; }" styleClass="input-text-table" />
+				</h:panelGroup>
+				
+				<h:panelGroup rendered="#{parceiroBean.selectedParceiro != null}" >
+					<p:commandButton value="Salvar" id="btn_salvar" icon="fa fa-floppy-o" type="submit" actionListener="#{parceiroBean.salvar(false)}" update="form_data_parceiro" styleClass="btn_menu" />
+					<p:commandButton value="Salvar e Voltar" id="btn_salvarvoltar" icon="fa fa-floppy-o" type="submit" actionListener="#{parceiroBean.salvar(true)}" update="form_data_parceiro" styleClass="btn_menu" />
+					<p:commandButton value="Excluir" id="btn_excluir" icon="fa fa-trash-o" onclick="PF('confirmation_exc_parceiro').show();" styleClass="btn_menu" />
+					<p:commandButton value="Voltar" id="btn_voltar" icon="fa fa-undo" immediate="true" actionListener="#{parceiroBean.atualizar}" update="form_data_parceiro :form_table_parceiro" styleClass="btn_menu" />						
+				</h:panelGroup>											
+			</div>
+			
+			<p:panel rendered="#{parceiroBean.selectedParceiro != null}" styleClass="altura" >
+			    
+			    <div class="row" >
+			    	<div class="two columns">	
+			    		<p:outputLabel value="Código" />
+			    		<p:inputText id="codigo" disabled="true" value="#{parceiroBean.selectedParceiro.id_parceiro}" styleClass="u-full-width center" />	
+			    	</div>
+			    	<div class="two columns">
+			    		<p:outputLabel value="" />
+			    	</div>
+			    	<div class="four columns">
+			    		<p:outputLabel value="Tipo" />	
+						<p:selectBooleanCheckbox itemLabel="Cliente" value="#{parceiroBean.selectedParceiro.cliente}" >
+		        			<p:ajax event="valueChange" process="@this" />
+		        		</p:selectBooleanCheckbox>	
+		        		<p:selectBooleanCheckbox itemLabel="Fornecedor" value="#{parceiroBean.selectedParceiro.fornecedor}" style="margin-left: 20px;" >
+		        			<p:ajax event="valueChange" process="@this" />
+		        		</p:selectBooleanCheckbox>				    	
+			    	</div>
+			    	<div class="four columns">
+			    		<p:outputLabel value="Pessoa" />	
+			    		<p:selectOneMenu id="pessoa" value="#{parceiroBean.selectedParceiro.tipo_pessoa}" styleClass="u-full-width" >
+			        		<f:selectItem itemValue="1" itemLabel="Física" />
+							<f:selectItem itemValue="2" itemLabel="Jurídica" />
+							<p:ajax event="valueChange" process="@this" update="tipo_pessoa_label tipo_pessoa_values" />																	     							           			                			                			                  			               			              	                				                
+			            </p:selectOneMenu>
+			    	</div>
+			    </div>	
+	        	 
+	        	<div class="row" >
+	        		<div class="eight columns">
+		        		<p:outputLabel value="Nome" />
+		        		<p:inputText id="nome" value="#{parceiroBean.selectedParceiro.nome}" autocomplete="off" required="true" requiredMessage="Nome do parceiro não foi informado!" styleClass="u-full-width" >
+				        	<p:ajax event="valueChange" process="@this" />			        		
+				        </p:inputText>
+			        </div>
+			        
+			        <div class="four columns">
+				        <h:panelGroup id="tipo_pessoa_label" >
+					        <p:outputLabel value="CPF" rendered="#{parceiroBean.selectedParceiro.tipo_pessoa == 1 ? true : false}" />
+					        <p:outputLabel value="CNPJ" rendered="#{parceiroBean.selectedParceiro.tipo_pessoa == 2 ? true : false}" />
+				        </h:panelGroup>
+				        <h:panelGroup id="tipo_pessoa_values" >
+				        	<p:inputMask id="cpf" value="#{parceiroBean.selectedParceiro.inscricao}" converter="convertInput" mask="999.999.999-99" required="true" requiredMessage="CPF não informado!" rendered="#{parceiroBean.selectedParceiro.tipo_pessoa == 1 ? true : false}" styleClass="u-full-width" >
+				        		<p:ajax event="valueChange" process="@this" />
+				        	</p:inputMask>
+				        	<p:inputMask id="cnpj" value="#{parceiroBean.selectedParceiro.inscricao}" converter="convertInput" mask="99.999.999/9999-99" required="true" requiredMessage="CNPJ não informado!" rendered="#{parceiroBean.selectedParceiro.tipo_pessoa == 2 ? true : false}" styleClass="u-full-width" >
+				        		<p:ajax event="valueChange" process="@this" />
+				        	</p:inputMask>
+			        	</h:panelGroup>
+			        </div>
+	        	</div>
+	        		
+	        	<br/>
+	        	
+	        	<p:tabView>
+	        		<p:tab title="Endereços" >
+			        	<div class="row" >
+				            <p:dataTable id="table_enderecos" widgetVar="table_enderecos" var="endereco" 
+				        		value="#{parceiroBean.selectedParceiro.enderecos}"
+								rowKey="#{endereco.id_endereco}" 
+								emptyMessage="Nenhum endereço cadastrado..."		
+								liveScroll="false" 
+								scrollHeight="100%"
+								scrollable="true"
+								style="height: calc(100vh - 330px);">
+								
+								<f:facet name="header">Endereços</f:facet>	
+				            	<p:column headerText="Tipo" style="width: 40px;" styleClass="center" sortBy="#{endereco.tipoDescricao}" ><h:outputText value="#{endereco.tipoDescricao}" /></p:column>
+				            	<p:column headerText="Endereço" style="width: 400px;" styleClass="center" sortBy="#{endereco.endereco}" ><h:outputText value="#{endereco.endereco}, #{endereco.num_endereco}" /></p:column>			 
+							    <p:column headerText="Município" style="width: 150px;" styleClass="center" sortBy="#{endereco.municipio}" ><h:outputText value="#{endereco.municipio} / #{endereco.estado}" /></p:column>
+							    
+							    <p:column style="width: 10px;" styleClass="center" >  									            				            		   		            				                   
+						            <p:commandButton update=":form_data_endereco" oncomplete="PF('endereco_dialog').show();" style="height: 18px; width: 18px; font-size: 10px;" icon="ui-icon-pencil" immediate="true"  title="Alterar/Visualizar" >  			               
+						               <f:setPropertyActionListener value="#{endereco}" target="#{parceiroBean.selectedEndereco}" />	                  
+						            </p:commandButton>				            				            	        
+						        </p:column>
+																															
+						        <p:column style="width: 10px;" styleClass="center" >  									            				            		   		            				                   
+						            <p:commandButton style="height: 18px; width: 18px; font-size: 10px;" icon="ui-icon-trash" immediate="true" onclick="PF('confirmation_exc_endereco').show()" title="Excluir" >  			               
+						               <f:setPropertyActionListener value="#{endereco}" target="#{parceiroBean.selectedEndereco}" />	                  
+						            </p:commandButton>			            				            	        
+						        </p:column>
+							</p:dataTable>
+			            </div>
+			            
+			            <div class="row" >
+				            <p:commandButton value="Novo Endereço" process="@this" actionListener="#{parceiroBean.novoEndereco}" oncomplete="PF('endereco_dialog').show();" update=":form_data_endereco"  >
+								<p:resetInput target=":form_data_endereco" /> 
+					    	</p:commandButton>
+				    	</div>
+				    </p:tab>
+				    	
+	      			<p:tab title="Contatos" >
+			      		<div class="row" >
+				        	<p:dataTable id="table_contatos" widgetVar="table_contatos" var="contato" 
+				        		value="#{parceiroBean.selectedParceiro.contatos}"
+								rowKey="#{contato.id_contato}" 
+								emptyMessage="Nenhum contato cadastrado..."		
+								liveScroll="false" 
+								scrollHeight="100%"
+								scrollable="true"
+								style="height: calc(100vh - 330px);">
+				      			
+				      			<f:facet name="header">Contatos</f:facet>  
+				            	<p:column headerText="Tipo" style="width: 40px;" styleClass="center" sortBy="#{contato.tipoDescricao}" ><h:outputText value="#{contato.tipoDescricao}" /></p:column>
+				            	<p:column headerText="Forma" style="width: 100px;" styleClass="center" sortBy="#{contato.formaDescricao}" ><h:outputText value="#{contato.formaDescricao}" /></p:column>			 
+							    <p:column headerText="Contato" style="width: 400px;" styleClass="center" sortBy="#{contato.contato}" ><h:outputText value="#{contato.telefoneFormatado == null ? contato.contato : contato.telefoneFormatado}" /></p:column>
+							    
+							    <p:column style="width: 10px;" styleClass="center" >  									            				            		   		            				                   
+						            <p:commandButton update=":form_data_contato" oncomplete="PF('contato_dialog').show();" style="height: 18px; width: 18px; font-size: 10px;" icon="ui-icon-pencil" immediate="true"  title="Alterar/Visualizar" >  			               
+						               <f:setPropertyActionListener value="#{contato}" target="#{parceiroBean.selectedContato}" />	                  
+						            </p:commandButton>				            				            	        
+						        </p:column>
+																															
+						        <p:column style="width: 10px;" styleClass="center" >  									            				            		   		            				                   
+						            <p:commandButton style="height: 18px; width: 18px; font-size: 10px;" icon="ui-icon-trash" immediate="true" onclick="PF('confirmation_exc_contato').show()" title="Excluir" >  			               
+						               <f:setPropertyActionListener value="#{contato}" target="#{parceiroBean.selectedContato}" />	                  
+						            </p:commandButton>			            				            	        
+						        </p:column>					    			 						   
+				            </p:dataTable>	
+			            </div>		            
+			            
+			            <div class="row" >
+				            <p:commandButton value="Novo Contato" process="@this" actionListener="#{parceiroBean.novoContato}" oncomplete="PF('contato_dialog').show();" update=":form_data_contato"  >
+								<p:resetInput target=":form_data_contato" /> 
+					    	</p:commandButton>
+				    	</div>	
+		    		</p:tab>
+		    	</p:tabView>		    			        
+	        </p:panel>	
+		</h:form>
+		
+		<h:form id="form_table_parceiro" >
+			<p:dataTable var="parceiro" emptyMessage="Nenhum parceiro encontrado..."
+					scrollable="true"
+			 		value="#{parceiroBean.parceiros}"
+					rowKey="#{parceiro.id_parceiro}" 
+					selection="#{parceiroBean.selectedParceiro}"
+					selectionMode="single" 
+			 		rendered="#{parceiroBean.selectedParceiro == null}"
+			 		scrollHeight="100%" 
+					styleClass="altura" >
+			 	
+				<p:ajax event="rowSelect" listener="#{parceiroBean.onRowSelect}" />
+			 		
+			    <p:column headerText="Código" width="35" sortBy="#{parceiro.id_parceiro}" styleClass="center" ><h:outputText value="#{parceiro.id_parceiro}" /></p:column>	
+			    <p:column headerText="Nome" width="400" sortBy="#{parceiro.nome}" ><h:outputText value="#{parceiro.nome}" /></p:column>			 
+			    <p:column headerText="CPF / CNPJ" width="150" sortBy="#{parceiro.inscricao}" styleClass="center" ><h:outputText value="#{parceiro.inscricao}" ><f:converter converterId="cnpjcpfConverter" /></h:outputText></p:column>				 
+			    <p:column headerText="Munícipio / UF" width="150" sortBy="#{parceiro.enderecoPrincipal.municipio}" styleClass="center" ><h:outputText value="#{parceiro.enderecoPrincipal.municipio} / #{parceiro.enderecoPrincipal.estado}" /></p:column>
+			</p:dataTable>
+		</h:form>
+		
+	</div>
+	
+	<h:form id="form_data_endereco">	
+ 		<p:dialog header="Endereço" widgetVar="endereco_dialog" id="endereco_dialog" resizable="false" draggable="true" modal="true" width="600" >
+					  	
+			<p:ajax event="close" update="form_data_endereco"/>  											
+			<p:messages id="messages_endereco" closable="true" />
+			
+			<p:panel id="panel_endereco">
+				<div class="row">		
+					<div class="four columns">		
+						<h:outputLabel value="Tipo" />
+						<p:selectOneMenu value="#{parceiroBean.selectedEndereco.tipo}" maxlength="20" styleClass="u-full-width" >
+						   <f:selectItem itemValue="1" itemLabel="Principal" />
+						   <f:selectItem itemValue="2" itemLabel="Comercial" />
+			               <f:selectItem itemValue="3" itemLabel="Entrega" />
+			               <f:selectItem itemValue="4" itemLabel="Cobrança" />
+			               <f:selectItem itemValue="5" itemLabel="Outros" />
+			            </p:selectOneMenu>			
+		            </div>	            			           					
+				</div>								
+				
+				<div class="row">		
+					<div class="eight columns">
+						<h:outputLabel value="Endereço" />
+        				<p:inputText id="endereco" value="#{parceiroBean.selectedEndereco.endereco}" autocomplete="off" required="true" requiredMessage="Endereço não informado!" maxlength="50" styleClass="u-full-width" />
+					</div>
+					
+					<div class="four columns">	
+						<h:outputLabel value="Número" />
+						<p:inputText id="numero" value="#{parceiroBean.selectedEndereco.num_endereco}" autocomplete="off" required="true" requiredMessage="Número de endereço não informado!" maxlength="10" styleClass="u-full-width" >
+							<f:convertNumber groupingUsed="true" minFractionDigits="0" />																	
+						</p:inputText>																										
+					</div>
+				</div>	
+				
+				<div class="row">
+					<div class="eight columns">       											
+						<h:outputLabel value="Bairro" />	
+						<p:inputText id="bairro" value="#{parceiroBean.selectedEndereco.bairro}" autocomplete="off" required="true" requiredMessage="Bairro não informado!" maxlength="40" styleClass="u-full-width" />
+					</div>
+					
+					<div class="four columns">	
+						<h:outputLabel value="CEP" />
+						<p:inputMask value="#{parceiroBean.selectedEndereco.cep}" autocomplete="off" required="true" requiredMessage="CEP não informado!" maxlength="7" mask="99999-999" converter="convertInput" styleClass="u-full-width" />												
+					</div>
+				</div>	
+				
+				<div class="row">
+					<div class="eight columns">																																																																																			
+						<h:outputLabel value="Município" />
+						<p:inputText id="municipio" value="#{parceiroBean.selectedEndereco.municipio}" maxlength="60" required="true" requiredMessage="Município não informado!" styleClass="u-full-width" /> 
+					</div>
+					
+					<div class="four columns">	
+						<h:outputLabel value="Estado" />
+						<p:selectOneMenu id="estado" value="#{parceiroBean.selectedEndereco.estado}" required="true" requiredMessage="Estado não informado!" styleClass="u-full-width" >
+			        		<f:selectItem itemLabel="Selecione..." itemValue="" />
+							<f:selectItem itemLabel="Acre" itemValue="AC" />
+							<f:selectItem itemLabel="Alagoas" itemValue="AL" />
+							<f:selectItem itemLabel="Amapá" itemValue="AP" />
+							<f:selectItem itemLabel="Amazonas" itemValue="AN" />
+							<f:selectItem itemLabel="Bahia" itemValue="BA" />
+							<f:selectItem itemLabel="Ceará" itemValue="CE" />
+							<f:selectItem itemLabel="Distrito Federal" itemValue="DF" />
+							<f:selectItem itemLabel="Espírito Santo" itemValue="ES" />
+							<f:selectItem itemLabel="Goiás" itemValue="GO" />
+							<f:selectItem itemLabel="Maranhão" itemValue="MA" />
+							<f:selectItem itemLabel="Mato Grosso" itemValue="MG" />
+							<f:selectItem itemLabel="Mato Grosso do Sul" itemValue="MS" />
+							<f:selectItem itemLabel="Pará" itemValue="PA" />
+							<f:selectItem itemLabel="Paraíba" itemValue="PB" />
+							<f:selectItem itemLabel="Paraná" itemValue="PR" />
+							<f:selectItem itemLabel="Pernambuco" itemValue="PE" />
+							<f:selectItem itemLabel="Piauí" itemValue="PI" />
+							<f:selectItem itemLabel="Rio de Janeiro" itemValue="RJ" />
+							<f:selectItem itemLabel="Rio Grande do Norte" itemValue="RN" />
+							<f:selectItem itemLabel="Rio Grande do Sul" itemValue="RS" />
+							<f:selectItem itemLabel="Rondônia" itemValue="RO" />
+							<f:selectItem itemLabel="Roraima" itemValue="RR" />
+							<f:selectItem itemLabel="Santa Catarina" itemValue="SC" />
+							<f:selectItem itemLabel="São Paulo" itemValue="SP" />
+							<f:selectItem itemLabel="Sergipe" itemValue="SE" />
+							<f:selectItem itemLabel="Tocantins" itemValue="TO" />	
+						</p:selectOneMenu>																																												
+					</div>																																												
+				</div>														 
+			</p:panel>				
+			<br/>									
+			<p:commandButton value="Salvar" type="submit" actionListener="#{parceiroBean.salvaEndereco}" update="panel_endereco messages_endereco" />						
+			<br/>								
+		</p:dialog>
+	</h:form>
+	
+	<h:form id="form_data_contato">	
+ 		<p:dialog header="Contato" widgetVar="contato_dialog" id="contato_dialog" resizable="false" draggable="true" modal="true" width="400" >
+					  	
+			<p:ajax event="close" update="form_data_contato"/>  											
+			<p:messages id="messages_contato" showDetail="true" autoUpdate="false" closable="true" globalOnly="true"/>
+			
+			<p:panel id="panel_contato">
+				<div class="row">
+					<div class="six columns">						
+						<h:outputLabel value="Tipo" />
+						<p:selectOneMenu value="#{parceiroBean.selectedContato.tipo}" styleClass="u-full-width" >
+						   <f:selectItem itemValue="1" itemLabel="Principal" />																	     							           			                			                			                  			               			              	                
+			               <f:selectItem itemValue="2" itemLabel="Comercial" />
+			               <f:selectItem itemValue="3" itemLabel="Financeiro" />					               			               			                 	                	              	                		               			                			                		         
+			            </p:selectOneMenu>				
+					</div>
+					
+					<div class="six columns">
+						<h:outputLabel value="Forma" />
+						<p:selectOneMenu value="#{parceiroBean.selectedContato.forma}" styleClass="u-full-width" >
+						   <f:selectItem itemValue="1" itemLabel="Telefone" />																	     							           			                			                			                  			               			              	                
+			               <f:selectItem itemValue="2" itemLabel="Email" />
+			               <p:ajax event="valueChange" process="@this" update="contato" />		               					               			                 	                	              	                		               			                			                		         
+			            </p:selectOneMenu>	
+					</div>
+				</div>	
+			
+				<div class="row">	
+					<h:outputLabel value="Contato" />
+					<h:panelGroup id="contato" >
+						<p:inputMask id="telefone" value="#{parceiroBean.selectedContato.contato}" autocomplete="off" required="true" requiredMessage="Telefone não informado!" maxlength="15" converter="convertInput" mask="(99) 9999-9999?999" rendered="#{parceiroBean.selectedContato.forma == 1 ? true : false}" styleClass="u-full-width" />											
+						<p:inputText value="#{parceiroBean.selectedContato.contato}" autocomplete="off" maxlength="50" rendered="#{parceiroBean.selectedContato.forma == 2 ? true : false}" styleClass="u-full-width" />
+					</h:panelGroup>
+				</div>
+				
+				<div class="row">
+					<h:outputLabel value="Observação" />
+					<p:inputText value="#{parceiroBean.selectedContato.complemento}" maxlength="40" styleClass="u-full-width" />																			
+				</div>
+			</p:panel>
+			<br/>									
+			<p:commandButton value="Salvar" type="submit" actionListener="#{parceiroBean.salvaContato}" update="panel_contato messages_contato" />			
+			<br/>
+		</p:dialog>
+	</h:form>
+	
+	<h:form id="dlg_exc_parceiro">
+		<p:confirmDialog message="Deseja realmente excluir este parceiro?" hideEffect="explode" header="Aviso" severity="alert" widgetVar="confirmation_exc_parceiro" modal="true" >							
+			<p:commandButton value="Sim" oncomplete="PF('confirmation_exc_parceiro').hide();" actionListener="#{parceiroBean.excluir}" update=":form_data_parceiro :form_table_parceiro" />						
+			<p:commandButton value="Não" onclick="PF('confirmation_exc_parceiro').hide();" />							
+		</p:confirmDialog>
+	</h:form>
+	
+	<h:form id="dlg_exc_contato">
+		<p:confirmDialog message="Deseja realmente excluir este contato?" hideEffect="explode" header="Aviso" severity="alert" widgetVar="confirmation_exc_contato" modal="true" >							
+			<p:commandButton value="Sim" oncomplete="PF('confirmation_exc_contato').hide();" actionListener="#{parceiroBean.excluiContato}" update=":form_data_parceiro" />						
+			<p:commandButton value="Não" onclick="PF('confirmation_exc_contato').hide();" />							
+		</p:confirmDialog>
+	</h:form>
+	
+	<h:form id="dlg_exc_endereco">
+		<p:confirmDialog message="Deseja realmente excluir este endereço?" hideEffect="explode" header="Aviso" severity="alert" widgetVar="confirmation_exc_endereco" modal="true" >							
+			<p:commandButton value="Sim" oncomplete="PF('confirmation_exc_endereco').hide();" actionListener="#{parceiroBean.excluiEndereco}" update=":form_data_parceiro" />						
+			<p:commandButton value="Não" onclick="PF('confirmation_exc_endereco').hide();" />							
+		</p:confirmDialog>
+	</h:form>
+	
+</h:body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"	
+	xmlns:p="http://primefaces.org/ui">
+	
+<h:head>
+	<title><ui:insert name="title">Estoque - CleanWork</ui:insert></title>
+	<link rel="shortcut icon" href="img/favicon.ico" />	
+</h:head>
+<h:body>
+
+	<ui:include src="header.xhtml" />
+	
+	<ui:include src="menu.xhtml" />
+	
+	<div id="layout-portlets-cover" class="fontRegular" >			
+		<h:form id="form_data_estoque" >				
+			
+			<p:growl id="growl" autoUpdate="false" showDetail="true" />
+			
+			<div id="menu" class="clean-menu" >	
+				<p:commandButton id="btn_search" title="Pesquisar" immediate="true" process="filtro" partialSubmit="true" icon="fa fa-search" styleClass="btn-pesquisa-table" />
+				<p:remoteCommand name="filtrar" process="filtro" />	
+				<p:inputText id="filtro" value="#{estoqueBean.filtro}" placeholder="Pesquisar..."  onkeypress="if (event.keyCode == 13) { filtrar(); return false; }" styleClass="input-text-table" />														
+			</div>									
+		</h:form>
+		
+		<h:form id="form_table_estoque" >
+			<p:dataTable var="estoque" emptyMessage="Nenhum produto encontrado..."
+					scrollable="true"
+			 		value="#{estoqueBean.estoques}"
+			 		scrollHeight="100%" 
+					styleClass="altura"  >
+			 	
+			 	<p:column headerText="Código" width="50" sortBy="#{estoque.produto.id_produto}" styleClass="center" ><h:outputText value="#{estoque.produto.id_produto}" /></p:column>	
+			    <p:column headerText="Produto" width="500" sortBy="#{estoque.produto.descricao}" ><h:outputText value="#{estoque.produto.descricao}" /></p:column>	
+			    <p:column headerText="Saldo Estoque" width="120" sortBy="#{estoque.qtd}" style="text-align: right;" ><h:outputText value="#{estoque.qtd}" ><f:convertNumber minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="12" /></h:outputText></p:column>				    
+			</p:dataTable>
+		</h:form>		
+	</div>
+	
+</h:body>
+</html>
