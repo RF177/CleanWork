@@ -12,10 +12,15 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpSession;
+
+import org.primefaces.context.RequestContext;
 
 import br.com.rf17.cleanwork.bean.pesquisagenerica.PesquisaGenericaTable;
 import br.com.rf17.cleanwork.bean.pesquisagenerica.PesquisaGenericaTableDados;
+import br.com.rf17.cleanwork.bean.pesquisagenerica.PesquisaGenericaUtils;
+import br.com.rf17.cleanwork.dao.cadastros.ParceiroDao;
 import br.com.rf17.cleanwork.model.cadastro.Parceiro;
 import br.com.rf17.cleanwork.utils.DataUtils;
 
@@ -25,13 +30,13 @@ public class RelComprasBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	//private ParceiroDao parceiroDao = new ParceiroDao();
+	private ParceiroDao parceiroDao = new ParceiroDao();
 
 	// Variaveis para pesquisa generica
 	private PesquisaGenericaTable pesquisaGenericaTable;// os dados da pesquisa
 	private List<PesquisaGenericaTableDados> filteredpesquisaGenericaDados;// o filtro da pesquisa
 	private PesquisaGenericaTableDados selectedPesquisaGenericaDados;// o item selecionado
-	//private String tipoPesquisa;
+	private String tipoPesquisa;
 
 	// Filtros
 	private Parceiro fornecedor;
@@ -97,16 +102,15 @@ public class RelComprasBean implements Serializable {
             Map<String,Object> parameters = new HashMap<String, Object>();
             parameters.put("dt1", dt1);    
         	parameters.put("dt2", dt2);   
-        	                	
-        	String filtroSql = "";
         	
-        	parameters.put("filtroSql", filtroSql);
-     
-        	//String baseDirImg = Definicoes.diretorioContext+"/img/";
-        	//parameters.put("basedirimg", baseDirImg);
-        	
-        	//parameters.put("id_venda", selectedVenda.getId_venda());
-        	            	
+	    	StringBuilder filtroSql = new StringBuilder();
+	    	
+	    	if(fornecedor != null){
+	    		filtroSql.append(" AND a.id_fornecedor = " + fornecedor.getId_parceiro());
+	    	}
+	    	
+	    	parameters.put("filtroSql", filtroSql.toString());
+	        	         	
             FacesContext ctx = FacesContext.getCurrentInstance();            
             HttpSession session = (HttpSession) ctx.getExternalContext().getSession(false);                         
      
@@ -119,11 +123,41 @@ public class RelComprasBean implements Serializable {
                 ec.redirect(ec.getRequestContextPath() + "/Report");                
             } catch (IOException ex) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), ex.getMessage()));
-            }                    
-            
+            }                                
          }catch(Exception ex){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), ex.getMessage()));   
          }
 	}
+	public List<Parceiro> completeFornecedor(String query) {
+		try {
+			return parceiroDao.listAll(query, 2);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	// ## PESQUISA ##
+	public void openPesquisaGenerica(ActionEvent event) {
+		try {
+			tipoPesquisa = (String) event.getComponent().getAttributes().get("parameter");
+			pesquisaGenericaTable = new PesquisaGenericaUtils().formaTabela(tipoPesquisa);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void pesquisaGenericaSelect() {
+		try {
+			if (tipoPesquisa.equals("fornecedor")) {
+				fornecedor = parceiroDao.getById(selectedPesquisaGenericaDados.getId_registro());
+				RequestContext.getCurrentInstance().update("form_data_relCompras:dados_fornecedor");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		pesquisaGenericaTable = null;
+	}
+	// ## PESQUISA ##
 	
 }

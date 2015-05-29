@@ -11,54 +11,56 @@
 </h:head>
 <h:body>
 
-	<p:layout styleClass="altura" >
-		<p:layoutUnit position="west" >
-			<ui:include src="menu.xhtml" />		 	
-	    </p:layoutUnit>
-
-		<p:layoutUnit position="center" >			
-			<h:form id="form_data_produto" >				
-				
-				<p:growl id="growl" autoUpdate="false" showDetail="true" />
-				
-				<div style="height: 35px;" >	
-					<h:commandLink value="Imprimir" onclick="javascript:window.open('','imp','height=600,width=800,toolbar=no,scrollbars=no')" target="imp" action="#{relVendasBean.imprimir}" style="float: right; margin-right: 7px;" />											
-				</div>
-				
-				<p:panel styleClass="altura" >				    	
-		        	   
-					<div class="row">
-						<div class="two columns">
-					 		<h:outputLabel value="Período de" />
-					 		<p:calendar value="#{relVendasBean.dt1}" required="true" locale="pt" pattern="dd/MM/yyyy" maxlength="10" styleClass="u-full-width" />
-					 	</div>
-					 	<div class="two columns">  				    	
-					    	<h:outputLabel  value="Período até" />		    
-			   	 			<p:calendar value="#{relVendasBean.dt2}" required="true" locale="pt" pattern="dd/MM/yyyy" maxlength="10" styleClass="u-full-width" />
-			   	 		</div>				   
-				    </div>
-				   
-				    <div class="row" >
-				    	<div class="six columns">
-			        		<p:outputLabel value="Cliente" />
-							<h:panelGroup id="dados_cliente">					
-								<p:inputText id="cod_cliente" disabled="true" value="#{relVendasBean.cliente.id_parceiro}" autocomplete="off" styleClass="u-full-width-codigo center" />										  																		
-								<p:autoComplete id="nome_cliente" widgetVar="nome_cliente" value="#{relVendasBean.cliente}" completeMethod="#{relVendasBean.completeCliente}" var="p" 
-												itemLabel="#{p.nome}" itemValue="#{p}" converter="parceiro" forceSelection="true" maxResults="10" styleClass="u-full-width-menos-codigo-search" >							
-									<p:ajax event="itemSelect" update="cod_cliente" />															
-									<p:column>#{p.id_parceiro}</p:column>
-									<p:column>#{p.nome}</p:column>																	 					
-								</p:autoComplete>		
-							</h:panelGroup>			
-							<p:commandButton icon="ui-icon-search" update=":form_pesquisa_generica" actionListener="#{relVendasBean.openPesquisaGenerica}" oncomplete="PF('data_table_pesquisa_generica').clearFilters(); PF('pesquisa_generica_dialog').show();" immediate="true" styleClass="button-search" ><f:attribute name="parameter" value="cliente"/></p:commandButton>
-						</div>		        		
-		        	</div>  
-		        	  			        		        	
-		        </p:panel>	
-			</h:form>
+	
+	<ui:include src="header.xhtml" />
+	
+	<ui:include src="menu.xhtml" />
+	
+	<div id="layout-portlets-cover" class="fontRegular" >		
+		<h:form id="form_data_relVenda" >				
 			
-	    </p:layoutUnit>
-	</p:layout>
+			<p:growl id="growl" autoUpdate="false" showDetail="true" />
+			
+			<div id="menu" class="clean-menu" >					
+				<p:commandButton value="Imprimir" oncomplete="if (!args.validationFailed){ jQuery('#button_imprimir').click(); }" styleClass="btn_menu" icon="fa fa-print" />					  																									
+			</div>
+		
+			<p:panel styleClass="altura"  >
+				
+				<div class="row">
+					<div class="two columns">
+				 		<h:outputLabel value="Período de" />
+				 		<p:calendar value="#{relVendasBean.dt1}" required="true" locale="pt" pattern="dd/MM/yyyy" maxlength="10" styleClass="u-full-width" />
+				 	</div>
+				 	<div class="two columns">  				    	
+				    	<h:outputLabel  value="Período até" />		    
+		   	 			<p:calendar value="#{relVendasBean.dt2}" required="true" locale="pt" pattern="dd/MM/yyyy" maxlength="10" styleClass="u-full-width" />
+		   	 		</div>				   
+			    </div>
+			   
+			    <div class="row" >
+			    	<div class="six columns">
+		        		<p:outputLabel value="Cliente" />
+						<h:panelGroup id="dados_cliente">					
+							<p:inputText id="cod_cliente" disabled="true" value="#{relVendasBean.cliente.id_parceiro}" autocomplete="off" styleClass="u-full-width-codigo center" />										  																		
+							<p:autoComplete id="nome_cliente" widgetVar="nome_cliente" value="#{relVendasBean.cliente}" completeMethod="#{relVendasBean.completeCliente}" var="p"
+											itemLabel="#{p.nome}" itemValue="#{p}" converter="parceiro" forceSelection="true" maxResults="10" styleClass="u-full-width-menos-codigo-search" >							
+								<p:ajax event="itemSelect" update="cod_cliente" />															
+								<p:column>#{p.id_parceiro}</p:column>
+								<p:column>#{p.nome}</p:column>																	 					
+							</p:autoComplete>		
+						</h:panelGroup>		
+						<p:commandButton icon="ui-icon-search" update=":form_pesquisa_generica" actionListener="#{relVendasBean.openPesquisaGenerica}" oncomplete="PF('data_table_pesquisa_generica').clearFilters(); PF('pesquisa_generica_dialog').show();" immediate="true" styleClass="button-search" ><f:attribute name="parameter" value="cliente"/></p:commandButton>
+					</div>		        		
+	        	</div>  
+		        	  			        		        	
+	        </p:panel>	
+		</h:form>
+	</div>
+	
+	<h:form id="form_data_imprimir" target="_blank" prependId="false">				
+		<p:commandButton  style="display: none;" widgetVar="button_imprimir" id="button_imprimir" ajax="false" actionListener="#{relVendasBean.imprimir}" />			
+	</h:form>
 	
 	<!-- Tabela de pesquisa generica -->
     <h:form id="form_pesquisa_generica">

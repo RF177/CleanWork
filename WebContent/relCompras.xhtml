@@ -16,22 +16,16 @@
 	<ui:include src="menu.xhtml" />
 	
 	<div id="layout-portlets-cover" class="fontRegular" >		
-		<h:form id="form_data_produto" >				
+		<h:form id="form_data_relCompras" >				
 			
 			<p:growl id="growl" autoUpdate="false" showDetail="true" />
 			
 			<div id="menu" class="clean-menu" >		
-				<h:commandLink value="Imprimir" onclick="javascript:window.open('','imp','height=600,width=900,toolbar=no,scrollbars=no')" target="imp" action="#{relComprasBean.imprimir}" style="float: right; margin-right: 7px;" />											
+				<p:commandButton value="Imprimir" oncomplete="if (!args.validationFailed){ jQuery('#button_imprimir').click(); }" styleClass="btn_menu" icon="fa fa-print" />											
 			</div>
 			
 			<p:panel styleClass="altura" >				    	
 	        	
-	        	<div class="row">
-	        		<h3>
-	        			Filtros
-	        		</h3>	        		
-	        	</div>
-	        	   
 				<div class="row">
 					<div class="two columns">
 				 		<h:outputLabel value="Período de" />
@@ -53,15 +47,18 @@
 								<p:ajax event="itemSelect" update="cod_fornecedor" />															
 								<p:column>#{p.id_parceiro}</p:column>
 								<p:column>#{p.nome}</p:column>																	 					
-							</p:autoComplete>		
+							</p:autoComplete>	
 						</h:panelGroup>			
 						<p:commandButton icon="ui-icon-search" update=":form_pesquisa_generica" actionListener="#{relComprasBean.openPesquisaGenerica}" oncomplete="PF('data_table_pesquisa_generica').clearFilters(); PF('pesquisa_generica_dialog').show();" immediate="true" styleClass="button-search" ><f:attribute name="parameter" value="fornecedor"/></p:commandButton>
 					</div>		        		
-	        	</div>  
-	        	  			        		        	
+	        	</div>  	        	  			        		        	
 	        </p:panel>	
 		</h:form>		
 	</div>
+	
+	<h:form id="form_data_imprimir" target="_blank" prependId="false">				
+		<p:commandButton  style="display: none;" widgetVar="button_imprimir" id="button_imprimir" ajax="false" actionListener="#{relComprasBean.imprimir}" />			
+	</h:form>
 	
 	<!-- Tabela de pesquisa generica -->
     <h:form id="form_pesquisa_generica">
