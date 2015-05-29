@@ -306,7 +306,6 @@ public class VendaBean implements InterfaceBean, Serializable {
 		}
 		pesquisaGenericaTable = null;
 	}
-
 	// ## PESQUISA ##
 
 	public void calculaItem() {
