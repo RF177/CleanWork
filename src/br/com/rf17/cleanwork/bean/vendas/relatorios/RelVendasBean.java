@@ -30,15 +30,13 @@ public class RelVendasBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	//private ParceiroDao parceiroDao = new ParceiroDao();
-
+	private ParceiroDao parceiroDao = new ParceiroDao();
+	
 	// Variaveis para pesquisa generica
 	private PesquisaGenericaTable pesquisaGenericaTable;// os dados da pesquisa
 	private List<PesquisaGenericaTableDados> filteredpesquisaGenericaDados;// o filtro da pesquisa
 	private PesquisaGenericaTableDados selectedPesquisaGenericaDados;// o item selecionado
 	private String tipoPesquisa;
-
-	private ParceiroDao parceiroDao = new ParceiroDao();
 	
 	// Filtros
 	private Parceiro cliente;
