@@ -275,7 +275,7 @@ public class FichaTecnicaBean implements InterfaceBean, Serializable {
 	}
 
 	public void calculaCustoTotal() {
-		selectedFichaTecnica = PcpService.calculaCustoTotalFicha(selectedFichaTecnica);
+		selectedFichaTecnica = PcpService.calculaFichaTecnica(selectedFichaTecnica);
 	}
 
 }

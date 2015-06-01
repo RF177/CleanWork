@@ -69,31 +69,7 @@
 					</h:panelGroup>			
 					<p:commandButton icon="ui-icon-search" update=":form_pesquisa_generica" actionListener="#{fichaTecnicaBean.openPesquisaGenerica}" oncomplete="PF('data_table_pesquisa_generica').clearFilters(); PF('pesquisa_generica_dialog').show();" immediate="true" styleClass="button-search" ><f:attribute name="parameter" value="produtofinal"/></p:commandButton>		        		
 	        	</div> 
-	       		
-	       		<div class="row" >
-			    	<div class="four columns">
-			    		<p:outputLabel value="Custos de Mão de Obra" />
-			    		<p:inputText value="#{fichaTecnicaBean.selectedFichaTecnica.custo_maodeobra}" styleClass="u-full-width" >
-			        		<f:convertNumber groupingUsed="true" minFractionDigits="2" />
-			        		<p:ajax event="valueChange" process="@this" update="@this total total_materiais" listener="#{fichaTecnicaBean.calculaCustoTotal}" />							
-						</p:inputText>	
-			    	</div>
-			    	<div class="four columns">
-			    		<p:outputLabel value="Gastos Gerais de Fabricação" />
-			    		<p:inputText value="#{fichaTecnicaBean.selectedFichaTecnica.custo_ggf}" styleClass="u-full-width" >
-			        		<f:convertNumber groupingUsed="true" minFractionDigits="2" />
-			        		<p:ajax event="valueChange" process="@this" update="@this total total_materiais" listener="#{fichaTecnicaBean.calculaCustoTotal}" />							
-						</p:inputText>	
-			    	</div>
-			    	<div class="four columns">
-			    		<p:outputLabel value="Outros Custos" />
-			    		<p:inputText value="#{fichaTecnicaBean.selectedFichaTecnica.custo_outros}" id="preco_venda" styleClass="u-full-width" >
-			        		<f:convertNumber groupingUsed="true" minFractionDigits="2" />
-			        		<p:ajax event="valueChange" process="@this" update="@this total total_materiais" listener="#{fichaTecnicaBean.calculaCustoTotal}" />							
-						</p:inputText>	
-			    	</div>
-			    </div>	
-	        	
+	       		 
 	        	<br/>
 	      
 	      		<div class="row">
@@ -104,7 +80,7 @@
 						liveScroll="false" 
 						scrollable="true"
 						scrollHeight="100%"
-						style="height: calc(100vh - 370px);" >
+						style="height: calc(100vh - 315px);" >
 						
 						<f:facet name="header">Composição do Produto</f:facet>	
 		            	<p:column headerText="Produto" style="width: 400px;" sortBy="#{insumo.produto.descricao}" ><h:outputText value="#{insumo.produto.id_produto} - #{insumo.produto.descricao}" /></p:column>
@@ -133,16 +109,9 @@
 				    	</p:commandButton>
 			    	</div>
 			    	
-			    	<div class="six columns">
+			    	<div class="eight columns">
 			    		<h:outputLabel value="" />
 			    	</div>
-		    	
-		    		<div class="two columns">
-			    		<h:outputLabel value="Custo dos Materiais" />				    	
-				    	<h3>
-							<h:outputText id="total_materiais" value="#{fichaTecnicaBean.selectedFichaTecnica.custo_materiais}" ><f:convertNumber  minFractionDigits="2" maxIntegerDigits="12" /></h:outputText>						   						   																				
-						</h3>				
-					</div>
 		    	
 		    		<div class="two columns">
 			        	<h:outputLabel value="Custo Total" />					   																	

@@ -14,7 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import br.com.rf17.cleanwork.model.cadastro.Produto;
 
@@ -44,18 +43,6 @@ public class FichaTecnica {
 	@OneToMany(mappedBy = "fichaTecnica", targetEntity = FichaTecnicaInsumo.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FichaTecnicaInsumo> insumos;
 
-	@Column(name = "custo_maodeobra", precision = 12, scale = 3)
-	private double custo_maodeobra;
-
-	@Column(name = "custo_ggf", precision = 12, scale = 3)
-	private double custo_ggf;
-
-	@Column(name = "custo_outros", precision = 12, scale = 3)
-	private double custo_outros;
-
-	@Transient
-	private double custo_materiais;
-
 	public Long getId_fichatecnica() {
 		return id_fichatecnica;
 	}
@@ -80,35 +67,6 @@ public class FichaTecnica {
 		this.custo_total = custo_total;
 	}
 
-	public double getCusto_maodeobra() {
-		return custo_maodeobra;
-	}
-
-	public void setCusto_maodeobra(double custo_maodeobra) {
-		this.custo_maodeobra = custo_maodeobra;
-	}
-
-	/**
-	 * Gastos gerais de fabricacao
-	 * 
-	 * @return
-	 */
-	public double getCusto_ggf() {
-		return custo_ggf;
-	}
-
-	public void setCusto_ggf(double custo_ggf) {
-		this.custo_ggf = custo_ggf;
-	}
-
-	public double getCusto_outros() {
-		return custo_outros;
-	}
-
-	public void setCusto_outros(double custo_outros) {
-		this.custo_outros = custo_outros;
-	}
-
 	public Integer getCodigo() {
 		return codigo;
 	}
@@ -123,14 +81,6 @@ public class FichaTecnica {
 
 	public void setInsumos(List<FichaTecnicaInsumo> insumos) {
 		this.insumos = insumos;
-	}
-
-	public double getCusto_materiais() {
-		return custo_materiais;
-	}
-
-	public void setCusto_materiais(double custo_materiais) {
-		this.custo_materiais = custo_materiais;
 	}
 
 	public Produto getProduto() {
