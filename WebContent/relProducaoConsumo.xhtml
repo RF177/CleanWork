@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"	
+	xmlns:p="http://primefaces.org/ui">
+	
+<h:head>
+	<title><ui:insert name="title">Rel. Produção Consumo - CleanWork</ui:insert></title>
+	<link rel="shortcut icon" href="img/favicon.ico" />	
+</h:head>
+<h:body>
+	
+	<ui:include src="header.xhtml" />
+	
+	<ui:include src="menu.xhtml" />
+	
+	<div id="layout-portlets-cover" class="fontRegular" >		
+		<h:form id="form_data_relProducaoConsumo" >				
+			
+			<p:growl id="growl" autoUpdate="false" showDetail="true" />
+			
+			<div id="menu" class="clean-menu" >					
+				<p:commandButton value="Imprimir" oncomplete="if (!args.validationFailed){ jQuery('#button_imprimir').click(); }" styleClass="btn_menu" icon="fa fa-print" />					  																									
+			</div>
+		
+			<p:panel styleClass="altura"  >
+				
+				<div class="row">
+					<div class="two columns">
+				 		<h:outputLabel value="Período de" />
+				 		<p:calendar value="#{relProducaoConsumoBean.dt1}" required="true" locale="pt" pattern="dd/MM/yyyy" maxlength="10" styleClass="u-full-width" />
+				 	</div>
+				 	<div class="two columns">  				    	
+				    	<h:outputLabel  value="Período até" />		    
+		   	 			<p:calendar value="#{relProducaoConsumoBean.dt2}" required="true" locale="pt" pattern="dd/MM/yyyy" maxlength="10" styleClass="u-full-width" />
+		   	 		</div>				   
+			    </div>
+			   
+			    <div class="row" >
+	        		<div class="six columns">
+	        			<p:outputLabel value="Produto" />
+	        			<h:panelGroup id="dados_produto">					
+							<p:inputText id="cod_produto" disabled="true" value="#{relProducaoConsumoBean.produto.id_produto}" styleClass="u-full-width-codigo center" />														  																		
+							<p:autoComplete id="desc_produto" widgetVar="desc_produto" value="#{relProducaoConsumoBean.produto}" completeMethod="#{relProducaoConsumoBean.completeProduto}" var="p" 
+								            itemLabel="#{p.descricao}" itemValue="#{p}" converter="produto" forceSelection="true" maxResults="10" styleClass="u-full-width-menos-codigo-search" >							
+								<p:ajax event="itemSelect" update="cod_produto" />															
+								<p:column>#{p.id_produto}</p:column>
+								<p:column>#{p.descricao}</p:column>																	 					
+							</p:autoComplete>		
+						</h:panelGroup>			
+						<p:commandButton icon="ui-icon-search" update=":form_pesquisa_generica" actionListener="#{relProducaoConsumoBean.openPesquisaGenerica}" oncomplete="PF('data_table_pesquisa_generica').clearFilters(); PF('pesquisa_generica_dialog').show();" immediate="true" styleClass="button-search" ><f:attribute name="parameter" value="produtoinsumo"/></p:commandButton>
+	        		</div>
+	        	</div>  
+		        	  			        		        	
+	        </p:panel>	
+		</h:form>
+	</div>
+	
+	<h:form id="form_data_imprimir" target="_blank" prependId="false">				
+		<p:commandButton  style="display: none;" widgetVar="button_imprimir" id="button_imprimir" ajax="false" actionListener="#{relProducaoConsumoBean.imprimir}" />			
+	</h:form>
+	
+	<!-- Tabela de pesquisa generica -->
+    <h:form id="form_pesquisa_generica">
+		<p:dialog  header="#{relProducaoConsumoBean.pesquisaGenericaTable.pesquisaHeader}"  widgetVar="pesquisa_generica_dialog"  id="pesquisa_generica_dialog" resizable="false"  draggable="false" modal="true">				
+	        <p:dataTable  widgetVar="data_table_pesquisa_generica" tableStyle="width:auto;"   var="data" value="#{relProducaoConsumoBean.pesquisaGenericaTable.pesquisaGenericaDados}" rowKey="#{data.id_registro}" selection="#{relProducaoConsumoBean.selectedPesquisaGenericaDados}" selectionMode="single" emptyMessage="Nenhum registro encontrado!"	liveScroll="true" scrollRows="100" scrollHeight="250" scrollable="true" filteredValue="#{relProducaoConsumoBean.filteredpesquisaGenericaDados}" >		                	     
+				<p:columns value="#{relProducaoConsumoBean.pesquisaGenericaTable.pesquisaGenericacolumns}" var="column" width="#{column.width}" columnIndexVar="colIndex"  sortBy="#{data[column.property]}" filterBy="#{data[column.property]}" filterStyle="display: block;" ><f:facet name="header"> #{column.header}</f:facet>#{data[column.property]}</p:columns>  	            
+	        </p:dataTable><br/>		        	     								
+			<p:commandButton value="Selecionar" actionListener="#{relProducaoConsumoBean.pesquisaGenericaSelect}" update="pesquisa_generica_dialog" />
+        </p:dialog>
+     </h:form>
+	
+</h:body>
+</html>
