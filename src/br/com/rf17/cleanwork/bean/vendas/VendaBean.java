@@ -184,10 +184,13 @@ public class VendaBean implements InterfaceBean, Serializable {
 			selectedVenda.setData_emissao(new Date());
 			selectedVenda.setSituacao(2);// Passa para emitido
 			vendaDao.save(selectedVenda);
-			// Imprimir venda TODO
+			
+			RequestContext.getCurrentInstance().execute("executaimprimir();");	
+			
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO, "Emitido!", "A venda " + selectedVenda.getId_venda() + " foi emitida e impressa com sucesso!"));
-			atualizar();
+
+			//atualizar();
 
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro:", e.getMessage()));

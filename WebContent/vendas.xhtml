@@ -39,7 +39,7 @@
 					<p:commandButton value="Emitir" id="btn_emitir" icon="fa fa-check-circle" immediate="true" actionListener="#{vendaBean.emitir}" update="form_data_venda :form_table_venda" rendered="#{vendaBean.selectedVenda.id_venda != null and vendaBean.selectedVenda.situacao == 1}" styleClass="btn_menu" style="float: right;" />						
 					<p:commandButton value="Cancelar" id="btn_cancelar" icon="fa fa-times-circle" immediate="true" actionListener="#{vendaBean.cancelar}" update="form_data_venda :form_table_venda" rendered="#{vendaBean.selectedVenda.situacao == 2}" styleClass="btn_menu" style="float: right; margin-right: 10px;" />
 					
-					<p:commandButton value="Imprimir" oncomplete="if (!args.validationFailed){ jQuery('#button_imprimir').click(); }" styleClass="btn_menu" rendered="#{vendaBean.selectedVenda.situacao == 2}" icon="fa fa-print" style="float: right;" />					  											
+					<p:commandButton value="Imprimir" id="btn_imprimir" oncomplete="if (!args.validationFailed){ jQuery('#button_imprimir').click(); }" styleClass="btn_menu" rendered="#{vendaBean.selectedVenda.situacao == 2}" icon="fa fa-print" style="float: right;" />					  											
 				</h:panelGroup>											
 			</div>
 		
@@ -235,6 +235,12 @@
 	<h:form id="form_data_imprimir" target="_blank" prependId="false">				
 		<p:commandButton  style="display: none;" widgetVar="button_imprimir" id="button_imprimir" ajax="false" actionListener="#{vendaBean.imprimir}" />			
 	</h:form>	
+	
+	<script language="javascript" type="text/javascript">	 
+		function executaimprimir() {	    		    	          	             
+	    	document.getElementById('form_data_venda:btn_imprimir').click();	      	
+		}  	
+	</script>		 
 		
 	<h:form id="dlg_exc_venda">
 		<p:confirmDialog message="Deseja realmente excluir esta venda?" hideEffect="explode" header="Aviso" severity="alert" widgetVar="confirmation_exc_venda" modal="true" >							
