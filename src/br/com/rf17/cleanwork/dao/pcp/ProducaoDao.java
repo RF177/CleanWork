@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import br.com.rf17.cleanwork.abstracts.DaoCrud;
@@ -37,6 +38,8 @@ public class ProducaoDao extends DaoCrud<Long, Producao> {
 			criteria.createAlias("produto", "produto_alias");
 			criteria.add(Restrictions.like("produto_alias.descricao", "%"+filtro+"%"));
 		}
+		
+		criteria.addOrder(Order.desc("id_producao"));
 				
 		return (List<Producao>) criteria.list();  			
 	}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import br.com.rf17.cleanwork.abstracts.DaoCrud;
@@ -42,6 +43,8 @@ public class ProdutoDao extends DaoCrud<Long, Produto> {
 		}else{//Pesquisa pela descricao
 			criteria.add(HibernateUtil.stringRestrictionsCriteriaSd("descricao", filtro, true));			
 		}
+		
+		criteria.addOrder(Order.desc("id_produto"));
 				
 		return (List<Produto>) criteria.list();  			
 	}

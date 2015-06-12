@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import br.com.rf17.cleanwork.abstracts.DaoCrud;
@@ -37,6 +38,8 @@ public class EntradaDao extends DaoCrud<Long, Entrada> {
 			criteria.createAlias("fornecedor", "fornecedor_alias");
 			criteria.add(Restrictions.like("fornecedor_alias.nome", "%"+filtro+"%"));
 		}
+		
+		criteria.addOrder(Order.desc("id_entrada"));
 				
 		return (List<Entrada>) criteria.list();  			
 	}

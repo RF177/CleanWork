@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import br.com.rf17.cleanwork.abstracts.DaoCrud;
@@ -37,6 +38,8 @@ public class FichaTecnicaDao extends DaoCrud<Long, FichaTecnica> {
 		}else{//Pesquisa pela descricao da ficha
 			criteria.add(HibernateUtil.stringRestrictionsCriteriaSd("descricao", filtro, true));
 		}
+		
+		criteria.addOrder(Order.desc("id_fichatecnica"));
 				
 		return (List<FichaTecnica>) criteria.list();  			
 	}
