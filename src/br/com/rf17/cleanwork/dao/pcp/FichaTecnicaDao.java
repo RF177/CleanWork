@@ -35,7 +35,7 @@ public class FichaTecnicaDao extends DaoCrud<Long, FichaTecnica> {
 		if(StringFunctions.isInteger(filtro)){//Pesquisa pelo codigo da ficha
 			criteria.add(Restrictions.eq("codigo", Integer.parseInt(filtro)));
 		}else{//Pesquisa pela descricao da ficha
-			criteria.add(Restrictions.like("descricao", "%"+filtro+"%"));
+			criteria.add(HibernateUtil.stringRestrictionsCriteriaSd("descricao", filtro, true));
 		}
 				
 		return (List<FichaTecnica>) criteria.list();  			

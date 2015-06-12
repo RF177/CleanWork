@@ -40,7 +40,7 @@ public class ParceiroDao extends DaoCrud<Long, Parceiro> {
 		if(StringFunctions.isInteger(filtro)){//Pesquisa pelo id/codigo
 			criteria.add(Restrictions.eq("id_parceiro", Long.parseLong(filtro)));
 		}else{//Pesquisa pelo nome
-			criteria.add(Restrictions.like("nome", "%"+filtro+"%"));
+			criteria.add(HibernateUtil.stringRestrictionsCriteriaSd("nome", filtro, true));
 		}
 				
 		return (List<Parceiro>) criteria.list();  			

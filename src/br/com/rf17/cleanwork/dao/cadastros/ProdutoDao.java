@@ -40,7 +40,7 @@ public class ProdutoDao extends DaoCrud<Long, Produto> {
 		if(StringFunctions.isInteger(filtro)){//Pesquisa pelo id/codigo
 			criteria.add(Restrictions.eq("id_produto", Long.parseLong(filtro)));
 		}else{//Pesquisa pela descricao
-			criteria.add(Restrictions.like("descricao", "%"+filtro+"%"));
+			criteria.add(HibernateUtil.stringRestrictionsCriteriaSd("descricao", filtro, true));			
 		}
 				
 		return (List<Produto>) criteria.list();  			
