@@ -27,19 +27,20 @@ public class Produto {
 	@Column(name = "preco_custo", precision = 12, scale = 3, nullable = false)
 	private double preco_custo;
 
+	@Column(name = "preco_custo_indireto", precision = 12, scale = 3, nullable = false)
+	private double preco_custo_indireto;
+
 	@Column(name = "taxa_lucro", precision = 12, scale = 3)
 	private double taxa_lucro;
-	
+
 	@Column(name = "preco_venda", precision = 12, scale = 3)
 	private double preco_venda;
 
-	
 	public Produto() {
 		super();
 		this.tipo = 1;
 	}
 
-	
 	public Long getId_produto() {
 		return id_produto;
 	}
@@ -91,6 +92,18 @@ public class Produto {
 
 	public void setTaxa_lucro(double taxa_lucro) {
 		this.taxa_lucro = taxa_lucro;
+	}
+
+	public double getPreco_custo_indireto() {
+		return preco_custo_indireto;
+	}
+
+	public void setPreco_custo_indireto(double preco_custo_indireto) {
+		this.preco_custo_indireto = preco_custo_indireto;
+	}
+
+	public Double getPreco_custo_total() {
+		return preco_custo_indireto + preco_custo;
 	}
 
 	public String getTipoDescricao() {

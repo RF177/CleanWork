@@ -202,9 +202,9 @@ public class VendaBean implements InterfaceBean, Serializable {
 		try {
 			selectedVenda.setSituacao(3);// Passa para cancelado
 			vendaDao.save(selectedVenda);
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Emtiido!", "A venda " + selectedVenda.getId_venda() + " foi cancelada com sucesso!"));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelada!", "A venda " + selectedVenda.getId_venda() + " foi cancelada com sucesso!"));
 			
-			atualizar();
+			//atualizar();
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro:", e.getMessage()));
 			e.printStackTrace();

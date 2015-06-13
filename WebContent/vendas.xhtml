@@ -37,7 +37,7 @@
 					<p:commandButton value="Voltar" id="btn_voltar" icon="fa fa-undo" immediate="true" actionListener="#{vendaBean.atualizar}" update="form_data_venda :form_table_venda" styleClass="btn_menu" />
 					
 					<p:commandButton value="Emitir" id="btn_emitir" icon="fa fa-check-circle" immediate="true" actionListener="#{vendaBean.emitir}" update="form_data_venda :form_table_venda" rendered="#{vendaBean.selectedVenda.id_venda != null and vendaBean.selectedVenda.situacao == 1}" styleClass="btn_menu" style="float: right;" />						
-					<p:commandButton value="Cancelar" id="btn_cancelar" icon="fa fa-times-circle" immediate="true" actionListener="#{vendaBean.cancelar}" update="form_data_venda :form_table_venda" rendered="#{vendaBean.selectedVenda.situacao == 2}" styleClass="btn_menu" style="float: right; margin-right: 10px;" />
+					<p:commandButton value="Cancelar" id="btn_cancelar" icon="fa fa-times-circle" onclick="PF('confirmation_cancel_venda').show();" styleClass="btn_menu" rendered="#{vendaBean.selectedVenda.situacao == 2}" style="float: right; margin-right: 10px;" />
 					
 					<p:commandButton value="Imprimir" id="btn_imprimir" oncomplete="if (!args.validationFailed){ jQuery('#button_imprimir').click(); }" styleClass="btn_menu" rendered="#{vendaBean.selectedVenda.situacao == 2}" icon="fa fa-print" style="float: right;" />					  											
 				</h:panelGroup>											
@@ -253,6 +253,13 @@
 		<p:confirmDialog message="Deseja realmente excluir este produto da venda?" hideEffect="explode" header="Aviso" severity="alert" widgetVar="confirmation_exc_venda_item" modal="true" >							
 			<p:commandButton value="Sim" oncomplete="PF('confirmation_exc_venda_item').hide();" actionListener="#{vendaBean.excluiItem}" update=":form_data_venda :form_table_venda" />						
 			<p:commandButton value="Não" onclick="PF('confirmation_exc_venda_item').hide();" />							
+		</p:confirmDialog>
+	</h:form>
+	
+	<h:form id="dlg_cancel_venda">
+		<p:confirmDialog message="Deseja realmente cancelar esta venda e todas as movimentações provenientes dela?" hideEffect="explode" header="Aviso" severity="alert" widgetVar="confirmation_cancel_venda" modal="true" >							
+			<p:commandButton value="Sim" oncomplete="PF('confirmation_cancel_venda').hide();" actionListener="#{vendaBean.cancelar}" update=":form_data_venda :form_table_venda" />						
+			<p:commandButton value="Não" onclick="PF('confirmation_cancel_venda').hide();" />							
 		</p:confirmDialog>
 	</h:form>
 	

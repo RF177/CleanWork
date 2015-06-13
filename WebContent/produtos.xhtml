@@ -45,16 +45,13 @@
 			    		<p:outputLabel value="Código" />
 			    		<p:inputText id="codigo" disabled="true" value="#{produtoBean.selectedProduto.id_produto}" styleClass="u-full-width center" />	
 			    	</div>
-			    	<div class="ten columns">
+			    	<div class="eight columns">
 			    		<p:outputLabel value="Descrição" />
 			    		<p:inputText id="descricao" value="#{produtoBean.selectedProduto.descricao}" autocomplete="off" required="true" requiredMessage="Descrição do produto não foi informado!" styleClass="u-full-width" >
 		        			<p:ajax event="valueChange" process="@this" />
 		        		</p:inputText>	
-			    	</div>
-	        	</div>
-	        	
-	        	<div class="row" >
-	        		<div class="three columns">
+			    	</div>	        	
+	        		<div class="two columns">
 	        			<p:outputLabel value="Tipo" />
 	        			<p:selectOneMenu id="tipo" value="#{produtoBean.selectedProduto.tipo}" styleClass="u-full-width" >
 			        		<f:selectItem itemValue="1" itemLabel="Produto Final" />
@@ -62,40 +59,52 @@
 							<p:ajax event="valueChange" process="@this" update="label_precovenda preco_venda label_taxalucro taxa_lucro preco_custo label_sugestao_precovenda sugestao_preco_venda" />																	     							           			                			                			                  			               			              	                				                
 			            </p:selectOneMenu>
 	        		</div>
-	        		<div class="three columns">
-	        			<p:outputLabel value="Preço de Custo" />
+	        	</div>
+	        		
+	        	<br/>	
+	        		
+	        	<div class="row" >	
+	        		<div class="two columns">
+	        			<p:outputLabel value="Custo Direto" />
 	        			<p:inputText value="#{produtoBean.selectedProduto.preco_custo}" id="preco_custo" styleClass="u-full-width" >
 			        		<f:convertNumber groupingUsed="true" minFractionDigits="2" />
-			        		<p:ajax event="valueChange" process="@this" update="@this sugestao_preco_venda" listener="#{produtoBean.calculaSugestaoPrecoVenda}" />							
+			        		<p:ajax event="valueChange" process="@this" update="@this sugestao_preco_venda custo_total" listener="#{produtoBean.calculaSugestaoPrecoVenda}" />							
 						</p:inputText>
 	        		</div>
-	        		<div class="three columns">
+	        		<div class="two columns">
+	        			<p:outputLabel value="Custo Indireto" />
+	        			<p:inputText value="#{produtoBean.selectedProduto.preco_custo_indireto}" id="preco_custo_indireto" styleClass="u-full-width" >
+			        		<f:convertNumber groupingUsed="true" minFractionDigits="2" />
+			        		<p:ajax event="valueChange" process="@this" update="@this sugestao_preco_venda custo_total" listener="#{produtoBean.calculaSugestaoPrecoVenda}" />							
+						</p:inputText>
+	        		</div>
+	        		<div class="two columns">
+	        			<p:outputLabel value="Custo Total" />
+	        			<h4>
+	        				<h:outputText id="custo_total" value="#{produtoBean.selectedProduto.preco_custo_total}" ><f:convertNumber  minFractionDigits="2" maxIntegerDigits="12" /></h:outputText>
+	        			</h4>
+	        		</div>
+	        	</div>	
+	        	
+	        	<br/>
+	        	
+	        	<div class="row" >		
+	        		<div class="two columns">
 	        			<p:outputLabel value="Taxa de Lucro (%)" id="label_taxalucro" style="#{produtoBean.selectedProduto.tipo == 1 ? '' : 'display: none;'}" />
 	        			<p:inputText value="#{produtoBean.selectedProduto.taxa_lucro}" id="taxa_lucro" style="#{produtoBean.selectedProduto.tipo == 1 ? '' : 'display: none;'}" styleClass="u-full-width" >
 			        		<f:convertNumber groupingUsed="true" minFractionDigits="2" />
 			        		<p:ajax event="valueChange" process="@this" update="@this sugestao_preco_venda" listener="#{produtoBean.calculaSugestaoPrecoVenda}" />							
 						</p:inputText>
 	        		</div>
-	        		<div class="three columns">
-	        			<p:outputLabel value="Sugestão de Preço de Venda" id="label_sugestao_precovenda" style="#{produtoBean.selectedProduto.tipo == 1 ? '' : 'display: none;'}" />
-	        			<p:inputText value="#{produtoBean.sugestao_preco_venda}" id="sugestao_preco_venda" disabled="true" style="#{produtoBean.selectedProduto.tipo == 1 ? '' : 'display: none;'}" styleClass="u-full-width" >
-			        		<f:convertNumber groupingUsed="true" minFractionDigits="2" />
-			        		<p:ajax event="valueChange" process="@this" update="@this" />							
-						</p:inputText>
+	        		<div class="two columns">
+	        			<p:outputLabel value="Suges. de Preço de Venda" id="label_sugestao_precovenda" style="#{produtoBean.selectedProduto.tipo == 1 ? '' : 'display: none;'}" />
+	        			<h4>
+	        				<h:outputText id="sugestao_preco_venda" value="#{produtoBean.sugestao_preco_venda}" style="#{produtoBean.selectedProduto.tipo == 1 ? '' : 'display: none;'}" ><f:convertNumber  minFractionDigits="2" maxIntegerDigits="12" /></h:outputText>
+	        			</h4>
+						
 	        		</div>
-	        	</div>
 	        	
-	        	<div class="row" >
-	        		<div class="three columns">
-	        			<p:outputLabel value="" />
-	        		</div>
-	        		<div class="three columns">
-	        			<p:outputLabel value="" />
-	        		</div>
-	        		<div class="three columns">
-	        			<p:outputLabel value="" />
-	        		</div>
-	        		<div class="three columns">
+	        		<div class="two columns">
 	        			<p:outputLabel value="Preço de Venda" id="label_precovenda" style="#{produtoBean.selectedProduto.tipo == 1 ? '' : 'display: none;'}" />
 	        			<p:inputText value="#{produtoBean.selectedProduto.preco_venda}" id="preco_venda" style="#{produtoBean.selectedProduto.tipo == 1 ? '' : 'display: none;'}" styleClass="u-full-width" >
 			        		<f:convertNumber groupingUsed="true" minFractionDigits="2" />

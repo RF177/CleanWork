@@ -2,6 +2,7 @@ package br.com.rf17.cleanwork.bean.pcp;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -44,9 +45,39 @@ public class FichaTecnicaBean implements InterfaceBean, Serializable {
 	private List<PesquisaGenericaTableDados> filteredpesquisaGenericaDados;// o filtro da pesquisa
 	private PesquisaGenericaTableDados selectedPesquisaGenericaDados;// o item selecionado
 	private String tipoPesquisa;
-
+	
+	//Custos indiretos
+	private Date dt1 = new Date();
+	private Date dt2 = new Date();
+	private Double custos_indiretos;
+	
 	public FichaTecnicaBean() {
 		atualizar();
+	}
+	
+	
+	public Double getCustos_indiretos() {
+		return custos_indiretos;
+	}
+
+	public void setCustos_indiretos(Double custos_indiretos) {
+		this.custos_indiretos = custos_indiretos;
+	}
+
+	public Date getDt1() {
+		return dt1;
+	}
+
+	public void setDt1(Date dt1) {
+		this.dt1 = dt1;
+	}
+
+	public Date getDt2() {
+		return dt2;
+	}
+
+	public void setDt2(Date dt2) {
+		this.dt2 = dt2;
 	}
 
 	public List<FichaTecnica> getFichaTecnicas() {
@@ -207,6 +238,16 @@ public class FichaTecnicaBean implements InterfaceBean, Serializable {
 		calculaCustoTotal();
 		
 		RequestContext.getCurrentInstance().update("form_data_fichatecnica");
+	}
+	
+	public void lancaCustosIndiretos(){
+		try{
+			PcpService.lancaCustosIndiretos(dt1, dt2, custos_indiretos);
+			RequestContext.getCurrentInstance().execute("PF('indireto_dialog').hide()");
+		} catch (Exception e) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro:", e.getMessage()));
+			e.printStackTrace();
+		}
 	}
 	
 	//## PRODUTO FINAL ##

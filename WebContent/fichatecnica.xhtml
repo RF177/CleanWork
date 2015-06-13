@@ -25,6 +25,8 @@
 					<p:commandButton id="btn_novo" value="Novo" styleClass="btn_menu" icon="fa fa-plus" process="@this" actionListener="#{fichaTecnicaBean.novo}" update="form_data_fichatecnica" ><p:resetInput target="form_data_fichatecnica" /></p:commandButton>
 					<p:commandButton id="btn_atualizar" value="Atualizar" actionListener="#{fichaTecnicaBean.atualizar}" icon="fa fa-refresh" process="@this" update="form_data_fichatecnica" styleClass="btn_menu" />											
 					
+					<p:commandButton value="Custos Indiretos" id="btn_indiretos" icon="fa fa-building-o" onclick="PF('indireto_dialog').show();" styleClass="btn_menu" style="margin-left: 100px;" />
+					
 					<p:commandButton id="btn_search" title="Pesquisar" immediate="true" process="filtro" partialSubmit="true" icon="fa fa-search" styleClass="btn-pesquisa-table" />
 					<p:remoteCommand name="filtrar" process="filtro" />	
 					<p:inputText id="filtro" value="#{fichaTecnicaBean.filtro}" placeholder="Pesquisar..."  onkeypress="if (event.keyCode == 13) { filtrar(); return false; }" styleClass="input-text-table" />
@@ -201,7 +203,42 @@
 			<br/>
 		</p:dialog>
 	</h:form>
-		
+	
+	<h:form id="form_data_indiretos">	
+ 		<p:dialog header="Lançar Custos Indiretos" widgetVar="indireto_dialog" id="indireto_dialog" width="500" resizable="false" draggable="true" modal="true">
+ 		
+ 					  	
+			<p:ajax event="close" update="form_data_indiretos"/>  											
+			<p:messages id="messages_indireto" closable="true" />
+			
+			<p:panel id="panel_indireto">
+ 		
+ 				<div class="row">	
+					<div class="three columns">
+				 		<h:outputLabel value="Período de" />
+				 		<p:calendar value="#{fichaTecnicaBean.dt1}" required="true" locale="pt" pattern="dd/MM/yyyy" maxlength="10" requiredMessage="Período 1 não informado!" styleClass="u-full-width" />
+				 	</div>
+				 	<div class="three columns">  				    	
+				    	<h:outputLabel  value="Período até" />		    
+		   	 			<p:calendar value="#{fichaTecnicaBean.dt2}" required="true" locale="pt" pattern="dd/MM/yyyy" maxlength="10" requiredMessage="Período 2 não informado!" styleClass="u-full-width" />
+		   	 		</div>				   
+			    
+					<div class="six columns">
+						<h:outputLabel value="Custo Indireto" />
+						<p:inputText value="#{fichaTecnicaBean.custos_indiretos}" required="true" requiredMessage="Valor do custo indireto não informado!" validatorMessage="Custo indireto tem que ser maior que 0,01" styleClass="u-full-width" >
+			        		<f:convertNumber groupingUsed="true" minFractionDigits="2" />
+			        		<f:validateDoubleRange minimum="0.01" />
+			        		<p:ajax event="valueChange" process="@this" update="@this" />							
+						</p:inputText>
+					</div>
+				</div>				    
+			</p:panel>  
+			<br/>									
+			<p:commandButton value="Lançar" type="submit" actionListener="#{fichaTecnicaBean.lancaCustosIndiretos}" update="panel_indireto messages_indireto" />			
+			<br/> 		
+ 		</p:dialog>
+ 	</h:form>	
+ 		
 	<h:form id="dlg_exc_produto">
 		<p:confirmDialog message="Deseja realmente excluir este produto?" hideEffect="explode" header="Aviso" severity="alert" widgetVar="confirmation_exc_produto" modal="true" >							
 			<p:commandButton value="Sim" oncomplete="PF('confirmation_exc_produto').hide();" actionListener="#{fichaTecnicaBean.excluir}" update=":form_data_fichatecnica :form_table_fichatecnica" />						
