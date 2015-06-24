@@ -24,6 +24,7 @@ import br.com.rf17.cleanwork.model.cadastro.Produto;
 import br.com.rf17.cleanwork.model.pcp.FichaTecnica;
 import br.com.rf17.cleanwork.model.pcp.FichaTecnicaInsumo;
 import br.com.rf17.cleanwork.service.pcp.PcpService;
+import br.com.rf17.cleanwork.utils.DataUtils;
 
 @ManagedBean
 @ViewScoped
@@ -47,8 +48,8 @@ public class FichaTecnicaBean implements InterfaceBean, Serializable {
 	private String tipoPesquisa;
 	
 	//Custos indiretos
-	private Date dt1 = new Date();
-	private Date dt2 = new Date();
+	private Date dt1 = DataUtils.primeiroDiaMes(new Date());
+	private Date dt2 = DataUtils.ultimoDiaMes(new Date());
 	private Double custos_indiretos;
 	
 	public FichaTecnicaBean() {
@@ -244,6 +245,7 @@ public class FichaTecnicaBean implements InterfaceBean, Serializable {
 		try{
 			PcpService.lancaCustosIndiretos(dt1, dt2, custos_indiretos);
 			RequestContext.getCurrentInstance().execute("PF('indireto_dialog').hide()");
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Custos indiretos lançados com sucesso!", "Confira no cadastro dos produtos que tiveram produção no período selecionado."));
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro:", e.getMessage()));
 			e.printStackTrace();

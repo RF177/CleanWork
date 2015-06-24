@@ -60,15 +60,15 @@ public class ProducaoDao extends DaoCrud<Long, Producao> {
 			StringBuilder query = new StringBuilder();
 			query.append("select sum(qtd) qtd_producao");
 			query.append("  from producao");
-			query.append(" where data >= '"+df.format(dt_ini)+"' and data <= '"+df.format(dt_fim)+"' and situacao = 3 ");
+			query.append(" where TRUNC(data) between TO_DATE('"+df.format(dt_ini)+"', 'dd/mm/yyyy') and TO_DATE('"+df.format(dt_fim)+"', 'dd/mm/yyyy') and situacao = 3 ");
 			
 			SQLQuery sqlQuery = session.createSQLQuery(query.toString());
+			List<Object[]> records = sqlQuery.list();
 			
-			List<Object[]> records = new ArrayList<Object[]>();		
-			records.addAll(sqlQuery.list());
-			
-			Double qtod_producaoTotalPeriodo = 0.0;		
-			qtod_producaoTotalPeriodo += Double.parseDouble(String.valueOf(records.get(0) [0]));				        	        	       
+			Double qtod_producaoTotalPeriodo = 0.0;	
+	        //for (Object[] record  : records) {	 
+	        	qtod_producaoTotalPeriodo += Double.parseDouble(String.valueOf(records.get(0) != null ? records.get(0) : 0.0));	        	        	        	        
+	        //}
 			
 			return qtod_producaoTotalPeriodo;
 			
@@ -88,7 +88,7 @@ public class ProducaoDao extends DaoCrud<Long, Producao> {
 			StringBuilder query = new StringBuilder();
 			query.append("select sum(qtd) qtd_producao_item, id_produto");
 			query.append("  from producao");
-			query.append(" where data >= '"+df.format(dt_ini)+"' and data <= '"+df.format(dt_fim)+"' and situacao = 3 ");
+			query.append(" where TRUNC(data) between TO_DATE('"+df.format(dt_ini)+"', 'dd/mm/yyyy') and TO_DATE('"+df.format(dt_fim)+"', 'dd/mm/yyyy') and situacao = 3 ");
 			query.append(" group by id_produto");
 			
 			SQLQuery sqlQuery = session.createSQLQuery(query.toString());

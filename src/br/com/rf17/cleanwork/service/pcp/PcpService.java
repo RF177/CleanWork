@@ -46,13 +46,11 @@ public class PcpService {
 			   producao_total_produto != null && !producao_total_produto.isEmpty()){
 				
 				for(Producao producao : producao_total_produto){
-				
 					double v_perc_representacao = ((producao.getQtd() / producao_total_periodo) * 100);
-					double v_custo_total_indireto = (vl_custo_indireto * (v_perc_representacao / 100));
+					double v_custo_total_indireto = (vl_custo_indireto * (v_perc_representacao / 100));					
+					//double v_custo_indireto = v_custo_total_indireto / producao.getQtd();//Por producao do produto
 					
-					double v_custo_indireto = v_custo_total_indireto / producao.getQtd();
-					
-					producao.getProduto().setPreco_custo_indireto(v_custo_indireto);
+					producao.getProduto().setPreco_custo_indireto(v_custo_total_indireto);
 					produtoDao.save(producao.getProduto());					
 				}
 			}			

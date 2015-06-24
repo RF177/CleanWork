@@ -25,7 +25,7 @@
 					<p:commandButton id="btn_novo" value="Novo" styleClass="btn_menu" icon="fa fa-plus" process="@this" actionListener="#{fichaTecnicaBean.novo}" update="form_data_fichatecnica" ><p:resetInput target="form_data_fichatecnica" /></p:commandButton>
 					<p:commandButton id="btn_atualizar" value="Atualizar" actionListener="#{fichaTecnicaBean.atualizar}" icon="fa fa-refresh" process="@this" update="form_data_fichatecnica" styleClass="btn_menu" />											
 					
-					<p:commandButton value="Custos Indiretos" id="btn_indiretos" icon="fa fa-building-o" onclick="PF('indireto_dialog').show();" styleClass="btn_menu" style="margin-left: 100px;" />
+					<p:commandButton value="Custos Indiretos" id="btn_indiretos" icon="fa fa-usd" onclick="PF('indireto_dialog').show();" styleClass="btn_menu" style="margin-left: 100px;" />
 					
 					<p:commandButton id="btn_search" title="Pesquisar" immediate="true" process="filtro" partialSubmit="true" icon="fa fa-search" styleClass="btn-pesquisa-table" />
 					<p:remoteCommand name="filtrar" process="filtro" />	
