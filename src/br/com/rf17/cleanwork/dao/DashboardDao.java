@@ -27,7 +27,7 @@ public class DashboardDao {
         	Dashboard_financeiro dashboard_financeiro = new Dashboard_financeiro();
         	
         	dashboard_financeiro.setDescricao("Vendas");
-        	dashboard_financeiro.setValor(Double.parseDouble(String.valueOf(record[1])));
+        	dashboard_financeiro.setValor(Double.parseDouble(String.valueOf(record[1] != null ? record[1] : 0.0)));
         	
         	dashboards.add(dashboard_financeiro);	        	        	        
         }
@@ -46,8 +46,8 @@ public class DashboardDao {
         for (Object[] record  : records) {	 
         	Dashboard_financeiro dashboard_financeiro = new Dashboard_financeiro();
         	
-        	dashboard_financeiro.setDescricao("Compras");
-        	dashboard_financeiro.setValor(Double.parseDouble(String.valueOf(record[1])));
+        	dashboard_financeiro.setDescricao("Compras");        	
+        	dashboard_financeiro.setValor(Double.parseDouble(String.valueOf(record[1] != null ? record[1] : 0.0)));
         	
         	dashboards.add(dashboard_financeiro);	        	        	        
         }        
