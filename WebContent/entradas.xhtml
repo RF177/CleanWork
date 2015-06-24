@@ -50,7 +50,7 @@
 			    	
 			    	<div class="three columns">
 			    		<p:outputLabel value="Data" />
-			    		<p:calendar id="data" value="#{entradaBean.selectedEntrada.data_entrada}" required="true" requiredMessage="Data da compra não foi informada" styleClass="u-full-width" >
+			    		<p:calendar id="data" value="#{entradaBean.selectedEntrada.data_entrada}" required="true" requiredMessage="Data da compra não foi informada" locale="pt" pattern="dd/MM/yyyy" styleClass="u-full-width" >
 		        			<p:ajax event="dateSelect" process="@this" />
 		        		</p:calendar>	
 			    	</div>
