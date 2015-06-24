@@ -111,15 +111,19 @@ public class DashboardDao {
 	public List<Dashboard_producao> buscaProducao() throws Exception {
 		Session session = (Session) HibernateUtil.getEntityManager().getDelegate();
 				
-		SQLQuery query = session.createSQLQuery("select data, sum(qtd), situacao from producao group by data, situacao order by data");
+		SQLQuery query = session.createSQLQuery(" select extract(month from data) mes, extract(year from data) ano, sum(qtd) "
+				                               +" from producao group by extract(month from data), extract(year from data) ");
 		List<Object[]> records = query.list();
 		
 		List<Dashboard_producao> dashboards = new ArrayList<Dashboard_producao>();
         for (Object[] record  : records) {	 
         	Dashboard_producao dashboard_producao = new Dashboard_producao();
         	
-        	System.out.println(record);
-        	//dashboard_producao.setData(data);
+        	DateFormat formatter = new SimpleDateFormat("MM/yyyy");  
+        	Date date = (Date)formatter.parse(String.valueOf(record[0])+"/"+String.valueOf(record[1]));  
+        	
+        	dashboard_producao.setData(date);
+        	dashboard_producao.setQtd(Long.parseLong(String.valueOf(record[2])));
         	
         	dashboards.add(dashboard_producao);	        	        	        
         }        

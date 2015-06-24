@@ -17,6 +17,7 @@ import org.primefaces.model.chart.PieChartModel;
 
 import br.com.rf17.cleanwork.dao.DashboardDao;
 import br.com.rf17.cleanwork.model.dashboard.Dashboard_financeiro;
+import br.com.rf17.cleanwork.model.dashboard.Dashboard_producao;
 
 @ManagedBean
 @ViewScoped
@@ -73,13 +74,14 @@ public class DashboardBean {
 		double compras = dashboardDao.buscaValorCompras().get(0).getValor();
 		double vendas = dashboardDao.buscaValorVendas().get(0).getValor();
 		
-		double porcent_compras = (compras / (compras+vendas)) * 100;
-		double porcent_vendas = (vendas / (vendas+compras)) * 100;
+		//double porcent_compras = (compras / (compras+vendas)) * 100;
+		//double porcent_vendas = (vendas / (vendas+compras)) * 100;
 		
 		financeiro.setShowDataLabels(true);
-		financeiro.set("Contas a Pagar", porcent_compras);
-		financeiro.set("Contas a Receber", porcent_vendas);
+		financeiro.set("Contas a Pagar", compras);
+		financeiro.set("Contas a Receber", vendas);
 		financeiro.setTitle("Financeiro");
+		financeiro.setShowDataLabels(true);
 		financeiro.setLegendPosition("ne");
 		financeiro.setSeriesColors("d15b47,629b58");
 	}
@@ -134,50 +136,25 @@ public class DashboardBean {
 
 	}
 
-	private void iniciaProducao() {
+	private void iniciaProducao() throws Exception {
 		producao = new BarChartModel();
 		producao.setTitle("Produção");
 		producao.setAnimate(true);
 		producao.setLegendPosition("ne");
-		//Axis yAxis_producao = producao.getAxis(AxisType.Y);
-		//yAxis_producao = producao.getAxis(AxisType.Y);
-		//yAxis_producao.setMin(0);
-		//yAxis_producao.setMax(200);
-		producao.setSeriesColors("E0BB26,629B58,3399CC,D15B47");
+		producao.setSeriesColors("d15b47,629b58");
+		DateAxis dateAxis = new DateAxis();
+		dateAxis.setTickAngle(-7);
+		dateAxis.setTickFormat("%m / %Y");//https://github.com/mbostock/d3/wiki/Time-Formatting
+		dateAxis.setTickInterval("2628000000");//1 mes em miliseconds
 		
+		producao.getAxes().put(AxisType.X, dateAxis);
 		
-		ChartSeries pendente = new ChartSeries();
-		pendente.setLabel("Pendentes");
-		//pendente.set("01/2015", 10);
-		//pendente.set("02/2015", 10);
-		//pendente.set("03/2015", 40);
-		pendente.set("04/2015", 10);
-		
-		ChartSeries em_producao = new ChartSeries();
-		em_producao.setLabel("Em Produção");
-		//em_producao.set("01/2015", 102);
-		//em_producao.set("02/2015", 100);
-		//em_producao.set("03/2015", 40);
-		em_producao.set("04/2015", 105);
+		ChartSeries series1 = new ChartSeries();
+		for(Dashboard_producao f : dashboardDao.buscaProducao()){			
+			series1.set(new SimpleDateFormat("yyyy-MM-dd").format(f.getData()), f.getQtd());			
+		}
+		producao.addSeries(series1);
 
-		ChartSeries concluido = new ChartSeries();
-		concluido.setLabel("Concluídas");
-		//concluido.set("01/2015", 110);
-		//concluido.set("02/2015", 160);
-		//concluido.set("03/2015", 140);
-		concluido.set("04/2015", 150);
-
-		ChartSeries cancelada = new ChartSeries();
-		cancelada.setLabel("Canceladas");
-		//cancelada.set("01/2015", 14);
-		//cancelada.set("02/2015", 17);
-		//cancelada.set("03/2015", 54);
-		cancelada.set("04/2015", 97);
-
-		producao.addSeries(pendente);
-		producao.addSeries(em_producao);
-		producao.addSeries(concluido);
-		producao.addSeries(cancelada);
 
 	}
 
