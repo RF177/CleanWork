@@ -112,7 +112,8 @@ public class DashboardDao {
 		Session session = (Session) HibernateUtil.getEntityManager().getDelegate();
 				
 		SQLQuery query = session.createSQLQuery(" select extract(month from data) mes, extract(year from data) ano, sum(qtd) "
-				                               +" from producao group by extract(month from data), extract(year from data) ");
+				                               +" from producao group by extract(month from data), extract(year from data) "
+				                               +" order by mes ");
 		List<Object[]> records = query.list();
 		
 		List<Dashboard_producao> dashboards = new ArrayList<Dashboard_producao>();

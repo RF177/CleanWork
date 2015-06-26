@@ -1,6 +1,7 @@
 package br.com.rf17.cleanwork.bean;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -28,6 +29,7 @@ public class DashboardBean {
 	private LineChartModel compras_vendas;
 	private BarChartModel producao;
 	private PieChartModel financeiro;
+	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 	public DashboardBean() {
 		criaGraficos();
@@ -74,9 +76,6 @@ public class DashboardBean {
 		double compras = dashboardDao.buscaValorCompras().get(0).getValor();
 		double vendas = dashboardDao.buscaValorVendas().get(0).getValor();
 		
-		//double porcent_compras = (compras / (compras+vendas)) * 100;
-		//double porcent_vendas = (vendas / (vendas+compras)) * 100;
-		
 		financeiro.setShowDataLabels(true);
 		financeiro.set("Contas a Pagar", compras);
 		financeiro.set("Contas a Receber", vendas);
@@ -92,23 +91,12 @@ public class DashboardBean {
 		compras_vendas.setAnimate(true);
 		compras_vendas.setLegendPosition("ne");
 		compras_vendas.setSeriesColors("d15b47,629b58");
+		
 		DateAxis dateAxis = new DateAxis();
 		dateAxis.setTickAngle(-7);
 		dateAxis.setTickFormat("%m / %Y");//https://github.com/mbostock/d3/wiki/Time-Formatting
 		dateAxis.setTickInterval("2628000000");//1 mes em miliseconds
-		
-        //Calendar cal = Calendar.getInstance();
-	    //cal.set(Calendar.DAY_OF_YEAR, 1);
-	    //dateAxis.setMin("1420077600000");//FIXME
-        
-        //cal.set(Calendar.DAY_OF_YEAR, 365); // for leap years
-        //dateAxis.setMax(cal.getTime());//FIXME
-		
-		//dateAxis.setMax("2015-02-01");
-	    //dateAxis.setMax("1451527200000");
-        
-        compras_vendas.getAxes().put(AxisType.X, dateAxis);
-        
+		compras_vendas.getAxes().put(AxisType.X, dateAxis);
         
 		LineChartSeries series1 = new LineChartSeries();
 		series1.setLabel("Compras");
@@ -116,23 +104,19 @@ public class DashboardBean {
 			series1.set("2015-0"+i+"-01", 0.0);//FIXME
 		}
 		for(Dashboard_financeiro f : dashboardDao.buscaValorComprasMes()){			
-			series1.set(new SimpleDateFormat("yyyy-MM-dd").format(f.getData()), f.getValor());			
+			series1.set(sdf.format(f.getData()), f.getValor());			
 		}
 		compras_vendas.addSeries(series1);
 		
 		LineChartSeries series2 = new LineChartSeries();
 		series2.setLabel("Vendas");
-		series2.set("2015-01-01", 0.0);
 		for (int i = 1; i < 13; i++) {
 			series2.set("2015-0"+i+"-01", 0.0);//FIXME
 		}
 		for(Dashboard_financeiro f : dashboardDao.buscaValorVendasMes()){			
-			series2.set(new SimpleDateFormat("yyyy-MM-dd").format(f.getData()), f.getValor());			
+			series2.set(sdf.format(f.getData()), f.getValor());			
 		}
-		series2.set("2015-12-01", 0.0);
 		compras_vendas.addSeries(series2);
-			
-		
 
 	}
 
@@ -140,21 +124,17 @@ public class DashboardBean {
 		producao = new BarChartModel();
 		producao.setTitle("Produção");
 		producao.setAnimate(true);
-		producao.setLegendPosition("ne");
-		producao.setSeriesColors("d15b47,629b58");
-		DateAxis dateAxis = new DateAxis();
-		dateAxis.setTickAngle(-7);
-		dateAxis.setTickFormat("%m / %Y");//https://github.com/mbostock/d3/wiki/Time-Formatting
-		dateAxis.setTickInterval("2628000000");//1 mes em miliseconds
+		producao.setSeriesColors("629b58");
 		
-		producao.getAxes().put(AxisType.X, dateAxis);
+		List<Dashboard_producao> producaos = dashboardDao.buscaProducao();
 		
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy");
 		ChartSeries series1 = new ChartSeries();
-		for(Dashboard_producao f : dashboardDao.buscaProducao()){			
-			series1.set(new SimpleDateFormat("yyyy-MM-dd").format(f.getData()), f.getQtd());			
+		for(Dashboard_producao f : producaos){			
+			series1.set(sdf.format(f.getData()), f.getQtd());			
 		}
+		
 		producao.addSeries(series1);
-
 
 	}
 

@@ -35,23 +35,6 @@ public class DataUtils {
 	    return cal.getTime();  
 	}  
 	
-	/*
-	 *  Retirado pois funcionava no windows, mas no linux estava jogando as datas erradas
-	 * por causa da localidade da data. Tem que rever se for utilizado!!!
-	 * 
-	public static Date primeiroDiaDaSemana(Date date){
-		Calendar cal = GregorianCalendar.getInstance();  
-		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);  
-	    return cal.getTime();  
-	}
-	
-	public static Date ultimoDiaDaSemana(Date date){
-		Calendar cal = GregorianCalendar.getInstance();  
-		cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);  
-	    return cal.getTime(); 
-	}
-	*/
-	
 	/**
 	 * Verifica se duas datas sao iguais
 	 * 
@@ -63,8 +46,6 @@ public class DataUtils {
 		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");		
 		return format.format(dt1).equals(format.format(dt2));
 	}
-	
-	
 	
 	public static int[] decodeDate(java.util.Date dtSel) {
 		GregorianCalendar gcSel = new GregorianCalendar();
@@ -96,8 +77,7 @@ public class DataUtils {
 		}
 		return dtRetorno;
 	}
-	
-	
+		
     public static String milisegundosParaHora(long tempo) {  
         String hora = "";  
         int secs = (int) tempo / 1000;  
