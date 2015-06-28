@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"	
+	xmlns:p="http://primefaces.org/ui">
+	
+<h:head>
+	<title><ui:insert name="title">Sobre - CleanWork</ui:insert></title>
+	<link rel="shortcut icon" href="img/favicon.ico" />
+</h:head>
+<h:body>
+
+	<ui:include src="header.xhtml" />
+	
+	<ui:include src="menu.xhtml" />
+	
+	<div id="layout-portlets-cover" class="fontRegular" >
+		
+		<p:panel style="height: calc(100vh - 62px); overflow-y: auto;" >
+			<center>
+				<div style="margin-top: 70px;" >
+					<p:graphicImage width="221" height="103" value="/img/error-face.svg" />
+					<br/><br/>
+					<p:outputLabel value="Função indisponível" style="font-size: 30px !important; color: #2B8D24 !important; font-weight: bold;" />
+					<br/><br/>
+					<p:outputLabel value="Desculpe o transtorno" style="font-size: 15px !important; color: #5C5C5C !important; font-weight: bold;" />
+					
+				</div>
+			</center>
+		</p:panel>			
+		
+	</div>
+</h:body>
+</html>
+
+
