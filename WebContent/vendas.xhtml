@@ -117,9 +117,9 @@
 						
 						<f:facet name="header">Produtos</f:facet>	
 		            	<p:column headerText="Produto" style="width: 300px;" sortBy="#{item.produto.descricao}" ><h:outputText value="#{item.produto.id_produto} - #{item.produto.descricao}" /></p:column>
-		            	<p:column headerText="Quantidade" style="width: 100px;" styleClass="center" sortBy="#{item.qtd}" ><h:outputText value="#{item.qtd}" ><f:convertNumber minFractionDigits="0" maxIntegerDigits="12" /></h:outputText></p:column>			 
-					    <p:column headerText="Valor Unitário" style="width: 100px;" styleClass="center" sortBy="#{item.vl_unitario}" ><h:outputText value="#{item.vl_unitario}" ><f:convertNumber minFractionDigits="2" maxIntegerDigits="12" /></h:outputText></p:column>
-					    <p:column headerText="Total" style="text-align: right; width: 110px;" styleClass="center" sortBy="#{item.vl_total}" ><h:outputText value="#{item.vl_total}" ><f:convertNumber minFractionDigits="2" maxIntegerDigits="12" /></h:outputText></p:column>
+		            	<p:column headerText="Quantidade" style="width: 100px;" styleClass="center" sortBy="#{item.qtd}" ><h:outputText value="#{item.qtd}" ><f:convertNumber minFractionDigits="0" maxIntegerDigits="12" locale="pt_BR" /></h:outputText></p:column>			 
+					    <p:column headerText="Valor Unitário" style="width: 100px;" styleClass="center" sortBy="#{item.vl_unitario}" ><h:outputText value="#{item.vl_unitario}" ><f:convertNumber minFractionDigits="2" maxIntegerDigits="12" locale="pt_BR" /></h:outputText></p:column>
+					    <p:column headerText="Total" style="text-align: right; width: 110px;" styleClass="center" sortBy="#{item.vl_total}" ><h:outputText value="#{item.vl_total}" ><f:convertNumber minFractionDigits="2" maxIntegerDigits="12" locale="pt_BR" /></h:outputText></p:column>
 					    
 					    <p:column style="width: 10px;" styleClass="center" >  									            				            		   		            				                   
 				            <p:commandButton update=":form_data_item" oncomplete="PF('item_dialog').show();" style="height: 18px; width: 18px; font-size: 10px;" icon="ui-icon-pencil" immediate="true"  title="Alterar/Visualizar" >  			               
@@ -149,7 +149,9 @@
 		        	<div class="two columns">
 		        		<h:outputLabel value="Valor Total" />
 		        		<h2>
-				        	<h:outputText id="total" value="#{vendaBean.selectedVenda.valor_total}" ><f:convertNumber  minFractionDigits="2" maxIntegerDigits="12" /></h:outputText>
+				        	<h:outputText id="total" value="#{vendaBean.selectedVenda.valor_total}" >
+				        		<f:convertNumber  minFractionDigits="2" maxIntegerDigits="12" locale="pt_BR" />
+				        	</h:outputText>
 				        </h2>					   																								
 					</div>
 				</div>				
@@ -173,7 +175,7 @@
 			    <p:column headerText="Situação" width="80" sortBy="#{venda.situacaoDescricao}" styleClass="center" ><span style="padding: 2px; color: #FFFFFF; border-radius: 5px; background: #{venda.situacaoCor};" ><h:outputText value="#{venda.situacaoDescricao}" /></span></p:column>				    			
 			    <p:column headerText="Cliente" width="350" sortBy="#{venda.cliente.nome}" ><h:outputText value="#{venda.cliente.nome}" /></p:column>
 			    <p:column headerText="Data" width="100" sortBy="#{venda.data_cadastro}" styleClass="center" ><h:outputText value="#{venda.data_cadastro}" ><f:convertDateTime pattern="dd/MM/yyyy"/></h:outputText></p:column>								 
-			    <p:column headerText="Valor" width="100" sortBy="#{venda.valor_total}" style="text-align: right;" ><h:outputText value="#{venda.valor_total}" ><f:convertNumber minFractionDigits="2" maxIntegerDigits="12" /></h:outputText></p:column>			 				    
+			    <p:column headerText="Valor" width="100" sortBy="#{venda.valor_total}" style="text-align: right;" ><h:outputText value="#{venda.valor_total}" ><f:convertNumber minFractionDigits="2" maxIntegerDigits="12" locale="pt_BR" /></h:outputText></p:column>			 				    
 			</p:dataTable>
 		</h:form>			
 	</div>
@@ -214,14 +216,14 @@
 						<div class="four columns">
 							<h:outputLabel  value="Valor Unitário" />		
 							<p:inputText value="#{vendaBean.selectedItem.vl_unitario}" disabled="#{vendaBean.selectedVenda.situacao != 1}" styleClass="u-full-width" >
-				        		<f:convertNumber groupingUsed="true" minFractionDigits="2" />
+				        		<f:convertNumber groupingUsed="true" minFractionDigits="2" locale="pt_BR" />
 				        		<p:ajax event="valueChange" process="@this" update="@this total" listener="#{vendaBean.calculaItem}" />							
 							</p:inputText>
 						</div>
 						
 						<div class="four columns">
 							<h:outputLabel value="Total" />
-							<h:outputText id="total" value="#{vendaBean.selectedItem.vl_total}" style="font-size: 20px; color: #000000; font-weight: bold; width: 85px;" ><f:convertNumber  minFractionDigits="2" maxIntegerDigits="12" /></h:outputText>
+							<h:outputText id="total" value="#{vendaBean.selectedItem.vl_total}" style="font-size: 20px; color: #000000; font-weight: bold; width: 85px;" ><f:convertNumber  minFractionDigits="2" maxIntegerDigits="12" locale="pt_BR" /></h:outputText>
 						</div>
 					</h:panelGroup>	
 				</div>						
