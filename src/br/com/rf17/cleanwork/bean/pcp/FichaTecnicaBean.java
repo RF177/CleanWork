@@ -243,9 +243,10 @@ public class FichaTecnicaBean implements InterfaceBean, Serializable {
 	
 	public void lancaCustosIndiretos(){
 		try{
-			PcpService.lancaCustosIndiretos(dt1, dt2, custos_indiretos);
+			String msg = PcpService.lancaCustosIndiretos(dt1, dt2, custos_indiretos);
 			RequestContext.getCurrentInstance().execute("PF('indireto_dialog').hide()");
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Custos indiretos lançados com sucesso!", "Confira no cadastro dos produtos que tiveram produção no período selecionado."));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Custos indiretos lançados com sucesso!", msg));
+			RequestContext.getCurrentInstance().update("form_data_fichatecnica:growl");
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro:", e.getMessage()));
 			e.printStackTrace();
